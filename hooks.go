@@ -21,18 +21,40 @@ type HookAttachment struct {
 	Color     string `json:"color"`
 }
 
-func (c *Client) Hooks(msg *HookMessage, token string) {
+type HookResponse struct {
+	Success bool `json:"success"`
+}
+
+func (c *Client) Hooks(msg *HookMessage, token string) (*HookResponse, error) {
 	opt, _ := json.Marshal(msg)
 
 	req, err := http.NewRequest("POST",
 		fmt.Sprintf("%s/hooks/%s", c.baseURL, token),
 		bytes.NewBuffer(opt))
+
 	req.Header.Set("Accept", "application/json; charset=utf-8")
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	if err != nil {
 		log.Fatal("Request error")
-		//return nil, err
 	}
 
+	res, err := c.HTTPClient.Do(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer res.Body.Close()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	resp := HookResponse{}
+
+	if err = json.NewDecoder(res.Body).Decode(&resp); err != nil {
+		return nil, err
+	}
+
+	return &resp, nil
 }
