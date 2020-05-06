@@ -28,9 +28,13 @@ type HookResponse struct {
 func (c *Client) Hooks(msg *HookMessage, token string) (*HookResponse, error) {
 	opt, _ := json.Marshal(msg)
 
+	url := fmt.Sprintf("%s/hooks/%s", c.baseURL, token)
+
 	req, err := http.NewRequest("POST",
-		fmt.Sprintf("%s/hooks/%s", c.baseURL, token),
+		url,
 		bytes.NewBuffer(opt))
+
+	fmt.Println(url)
 
 	req.Header.Set("Accept", "application/json; charset=utf-8")
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
@@ -40,9 +44,6 @@ func (c *Client) Hooks(msg *HookMessage, token string) (*HookResponse, error) {
 	}
 
 	res, err := c.HTTPClient.Do(req)
-	if err != nil {
-		log.Fatal(err)
-	}
 
 	defer res.Body.Close()
 
