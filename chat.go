@@ -72,14 +72,12 @@ func (c *Client) PostMessage(msg *Message) (*RespPostMessage, error) {
 	opt, _ := json.Marshal(msg)
 
 	req, err := http.NewRequest("POST",
-		fmt.Sprintf("%s/api/%s/chat.postMessage", c.baseURL, c.apiVersion),
+		fmt.Sprintf("%s/%s/chat.postMessage", c.baseURL, c.apiVersion),
 		bytes.NewBuffer(opt))
 
 	if err != nil {
 		return nil, err
 	}
-
-	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	res := RespPostMessage{}
 	if err := c.sendRequest(req, &res); err != nil {
