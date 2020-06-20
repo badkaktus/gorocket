@@ -2,7 +2,6 @@ package gorocket
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"time"
 )
@@ -330,15 +329,12 @@ func (c *Client) Directory() (*RespDirectory, error) {
 func (c *Client) Spotlight(query string) (*RespSpotlight, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/%s/spotlight?query=%s", c.baseURL, c.apiVersion, query), nil)
 
-	log.Printf(req.URL.String())
 	if err != nil {
-		log.Println("1111")
 		return nil, err
 	}
 
 	res := RespSpotlight{}
 	if err := c.sendRequest(req, &res); err != nil {
-		log.Println("2222")
 		return nil, err
 	}
 

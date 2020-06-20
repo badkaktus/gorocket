@@ -16,13 +16,13 @@ type Client struct {
 }
 
 // NewClient creates new Facest.io client with given API key
-func NewClient(token, user, url string) *Client {
+func NewClient(url string) *Client {
 	return &Client{
-		userID: user,
+		//userID: user,
 		HTTPClient: &http.Client{
 			Timeout: 5 * time.Minute,
 		},
-		xToken:     token,
+		//xToken:     token,
 		baseURL:    url,
 		apiVersion: "api/v1",
 	}
