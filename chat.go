@@ -81,16 +81,7 @@ func (c *Client) PostMessage(msg *Message) (*RespPostMessage, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("\nHeaders:\n")
-	// Loop over header names
-	for name, values := range req.Header {
-		// Loop over all values for the name.
-		for _, value := range values {
-			fmt.Println(name, value)
-		}
-	}
-	fmt.Printf("\n")
-	fmt.Printf("\nBody:\n%+v\n", req.GetBody)
+
 	res := RespPostMessage{}
 
 	if err := c.sendRequest(req, &res); err != nil {
