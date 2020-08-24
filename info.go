@@ -72,7 +72,7 @@ type lastMessage struct {
 type u struct {
 	ID       string `json:"_id"`
 	Username string `json:"username"`
-	Name     string `json:"name"`
+	Name     string `json:"name,omitempty"`
 }
 
 type RespSpotlight struct {
