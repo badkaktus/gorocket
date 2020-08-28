@@ -60,6 +60,100 @@ type CreateChannelResponse struct {
 	Success bool    `json:"success"`
 }
 
+type SimpleChannelRequest struct {
+	RoomId   string `json:"roomId,omitempty"`
+	RoomName string `json:"roomName,omitempty"`
+}
+
+type ChannelHistoryRequest struct {
+	RoomId    string
+	Latest    time.Time
+	Oldest    time.Time
+	Inclusive bool
+	Offset    int
+	Count     int
+	Unreads   bool
+}
+
+type ChannelInfoResponse struct {
+	Channel channelInfo `json:"channel"`
+	Success bool        `json:"success"`
+}
+
+type channelInfo struct {
+	ID           string `json:"_id"`
+	Name         string `json:"name"`
+	Fname        string `json:"fname"`
+	T            string `json:"t"`
+	Msgs         int    `json:"msgs"`
+	UsersCount   int    `json:"usersCount"`
+	U            uChat  `json:"u"`
+	CustomFields struct {
+	} `json:"customFields"`
+	Broadcast bool      `json:"broadcast"`
+	Encrypted bool      `json:"encrypted"`
+	Ts        time.Time `json:"ts"`
+	Ro        bool      `json:"ro"`
+	Default   bool      `json:"default"`
+	SysMes    bool      `json:"sysMes"`
+	UpdatedAt time.Time `json:"_updatedAt"`
+}
+
+type InviteChannelRequest struct {
+	RoomId string `json:"roomId"`
+	UserId string `json:"userId"`
+}
+
+type InviteChannelResponse struct {
+	Channel struct {
+		ID        string    `json:"_id"`
+		Ts        time.Time `json:"ts"`
+		T         string    `json:"t"`
+		Name      string    `json:"name"`
+		Usernames []string  `json:"usernames"`
+		Msgs      int       `json:"msgs"`
+		UpdatedAt time.Time `json:"_updatedAt"`
+		Lm        time.Time `json:"lm"`
+	} `json:"channel"`
+	Success bool `json:"success"`
+}
+
+type ChannelListResponse struct {
+	Channels []channelList `json:"channels"`
+	Offset   int           `json:"offset"`
+	Count    int           `json:"count"`
+	Total    int           `json:"total"`
+	Success  bool          `json:"success"`
+}
+
+type channelList struct {
+	ID        string    `json:"_id"`
+	Name      string    `json:"name"`
+	T         string    `json:"t"`
+	Usernames []string  `json:"usernames"`
+	Msgs      int       `json:"msgs"`
+	U         uChat     `json:"u"`
+	Ts        time.Time `json:"ts"`
+	Ro        bool      `json:"ro"`
+	SysMes    bool      `json:"sysMes"`
+	UpdatedAt time.Time `json:"_updatedAt"`
+}
+
+type ChannelMembersResponse struct {
+	Members []member `json:"members"`
+	Count   int      `json:"count"`
+	Offset  int      `json:"offset"`
+	Total   int      `json:"total"`
+	Success bool     `json:"success"`
+}
+
+type member struct {
+	ID       string `json:"_id"`
+	Username string `json:"username"`
+	Name     string `json:"name"`
+	Status   string `json:"status"`
+}
+
 // Adds all of the users on the server to a channel.
 func (c *Client) AddAllToChannel(params *AddAllRequest) (*AddAllResponse, error) {
 	opt, _ := json.Marshal(params)
@@ -125,11 +219,10 @@ func (c *Client) CloseChannel(param *SimpleChannelId) (*SimpleSuccessResponse, e
 
 // Gets channel counters.
 func (c *Client) ChannelCounters(param *ChannelCountersRequest) (*ChannelCountersResponse, error) {
-	opt, _ := json.Marshal(param)
 
 	req, err := http.NewRequest("GET",
 		fmt.Sprintf("%s/%s/channels.counters", c.baseURL, c.apiVersion),
-		bytes.NewBuffer(opt))
+		nil)
 
 	if param.RoomName == "" && param.RoomId == "" {
 		return nil, fmt.Errorf("False parameters")
@@ -157,7 +250,7 @@ func (c *Client) ChannelCounters(param *ChannelCountersRequest) (*ChannelCounter
 	return &res, nil
 }
 
-// Removes the channel from the user's list of channels.
+// Creates a new channel.
 func (c *Client) CreateChannel(param *CreateChannelRequest) (*CreateChannelResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -170,6 +263,175 @@ func (c *Client) CreateChannel(param *CreateChannelRequest) (*CreateChannelRespo
 	}
 
 	res := CreateChannelResponse{}
+
+	if err := c.sendRequest(req, &res); err != nil {
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+// Delete channel.
+func (c *Client) DeleteChannel(param *SimpleChannelRequest) (*SimpleSuccessResponse, error) {
+	opt, _ := json.Marshal(param)
+
+	req, err := http.NewRequest("POST",
+		fmt.Sprintf("%s/%s/channels.delete", c.baseURL, c.apiVersion),
+		bytes.NewBuffer(opt))
+
+	if err != nil {
+		return nil, err
+	}
+
+	res := SimpleSuccessResponse{}
+
+	if err := c.sendRequest(req, &res); err != nil {
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+// Get channel info.
+func (c *Client) ChannelInfo(param *SimpleChannelRequest) (*ChannelInfoResponse, error) {
+
+	req, err := http.NewRequest("GET",
+		fmt.Sprintf("%s/%s/channels.info", c.baseURL, c.apiVersion),
+		nil)
+
+	if param.RoomName == "" && param.RoomId == "" {
+		return nil, fmt.Errorf("False parameters")
+	}
+
+	url := req.URL.Query()
+	if param.RoomName != "" {
+		url.Add("roomName", param.RoomName)
+	}
+	if param.RoomId != "" {
+		url.Add("roomId", param.RoomId)
+	}
+	req.URL.RawQuery = url.Encode()
+
+	if err != nil {
+		return nil, err
+	}
+
+	res := ChannelInfoResponse{}
+
+	if err := c.sendRequest(req, &res); err != nil {
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+// Adds a user to the channel.
+func (c *Client) ChannelInvite(param *InviteChannelRequest) (*InviteChannelResponse, error) {
+	opt, _ := json.Marshal(param)
+
+	req, err := http.NewRequest("POST",
+		fmt.Sprintf("%s/%s/channels.invite", c.baseURL, c.apiVersion),
+		bytes.NewBuffer(opt))
+
+	if err != nil {
+		return nil, err
+	}
+
+	res := InviteChannelResponse{}
+
+	if err := c.sendRequest(req, &res); err != nil {
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+// Kick a user from the channel.
+func (c *Client) ChannelKick(param *InviteChannelRequest) (*InviteChannelResponse, error) {
+	opt, _ := json.Marshal(param)
+
+	req, err := http.NewRequest("POST",
+		fmt.Sprintf("%s/%s/channels.kick", c.baseURL, c.apiVersion),
+		bytes.NewBuffer(opt))
+
+	if err != nil {
+		return nil, err
+	}
+
+	res := InviteChannelResponse{}
+
+	if err := c.sendRequest(req, &res); err != nil {
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+// Get channels list
+func (c *Client) ChannelList() (*ChannelListResponse, error) {
+	req, err := http.NewRequest("GET",
+		fmt.Sprintf("%s/%s/channels.list", c.baseURL, c.apiVersion),
+		nil)
+
+	if err != nil {
+		return nil, err
+	}
+
+	res := ChannelListResponse{}
+
+	if err := c.sendRequest(req, &res); err != nil {
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+// Gets channel members
+func (c *Client) ChannelMembers(param *SimpleChannelRequest) (*ChannelMembersResponse, error) {
+
+	req, err := http.NewRequest("GET",
+		fmt.Sprintf("%s/%s/channels.members", c.baseURL, c.apiVersion),
+		nil)
+
+	if param.RoomName == "" && param.RoomId == "" {
+		return nil, fmt.Errorf("False parameters")
+	}
+
+	url := req.URL.Query()
+	if param.RoomName != "" {
+		url.Add("roomName", param.RoomName)
+	}
+	if param.RoomId != "" {
+		url.Add("roomId", param.RoomId)
+	}
+	req.URL.RawQuery = url.Encode()
+
+	if err != nil {
+		return nil, err
+	}
+
+	res := ChannelMembersResponse{}
+
+	if err := c.sendRequest(req, &res); err != nil {
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+// Adds the channel back to the user's list of channels.
+func (c *Client) OpenChannel(param *SimpleChannelId) (*SimpleSuccessResponse, error) {
+	opt, _ := json.Marshal(param)
+
+	req, err := http.NewRequest("POST",
+		fmt.Sprintf("%s/%s/channels.open", c.baseURL, c.apiVersion),
+		bytes.NewBuffer(opt))
+
+	if err != nil {
+		return nil, err
+	}
+
+	res := SimpleSuccessResponse{}
 
 	if err := c.sendRequest(req, &res); err != nil {
 		return nil, err
