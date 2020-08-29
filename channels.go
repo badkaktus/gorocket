@@ -154,6 +154,46 @@ type member struct {
 	Status   string `json:"status"`
 }
 
+type RenameChannelRequest struct {
+	RoomId  string `json:"roomId"`
+	NewName string `json:"name"`
+}
+
+type RenameChannelResponse struct {
+	Channel channelList `json:"channel"`
+	Success bool        `json:"success"`
+}
+
+type SetAnnouncementRequest struct {
+	RoomId       string `json:"roomId"`
+	Announcement string `json:"announcement"`
+}
+
+type SetAnnouncementResponse struct {
+	Announcement string `json:"announcement"`
+	Success      bool   `json:"success"`
+}
+
+type SetDescriptionRequest struct {
+	RoomId      string `json:"roomId"`
+	Description string `json:"description"`
+}
+
+type SetDescriptionResponse struct {
+	Description string `json:"description"`
+	Success     bool   `json:"success"`
+}
+
+type SetTopicRequest struct {
+	RoomId string `json:"roomId"`
+	Topic  string `json:"topic"`
+}
+
+type SetTopicResponse struct {
+	Topic   string `json:"topic"`
+	Success bool   `json:"success"`
+}
+
 // Adds all of the users on the server to a channel.
 func (c *Client) AddAllToChannel(params *AddAllRequest) (*AddAllResponse, error) {
 	opt, _ := json.Marshal(params)
@@ -425,6 +465,111 @@ func (c *Client) OpenChannel(param *SimpleChannelId) (*SimpleSuccessResponse, er
 
 	req, err := http.NewRequest("POST",
 		fmt.Sprintf("%s/%s/channels.open", c.baseURL, c.apiVersion),
+		bytes.NewBuffer(opt))
+
+	if err != nil {
+		return nil, err
+	}
+
+	res := SimpleSuccessResponse{}
+
+	if err := c.sendRequest(req, &res); err != nil {
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+// Changes a channel's name.
+func (c *Client) RenameChannel(param *RenameChannelRequest) (*RenameChannelResponse, error) {
+	opt, _ := json.Marshal(param)
+
+	req, err := http.NewRequest("POST",
+		fmt.Sprintf("%s/%s/channels.rename", c.baseURL, c.apiVersion),
+		bytes.NewBuffer(opt))
+
+	if err != nil {
+		return nil, err
+	}
+
+	res := RenameChannelResponse{}
+
+	if err := c.sendRequest(req, &res); err != nil {
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+// Sets the announcement for the channel.
+func (c *Client) SetAnnouncementChannel(param *SetAnnouncementRequest) (*SetAnnouncementResponse, error) {
+	opt, _ := json.Marshal(param)
+
+	req, err := http.NewRequest("POST",
+		fmt.Sprintf("%s/%s/channels.setAnnouncement", c.baseURL, c.apiVersion),
+		bytes.NewBuffer(opt))
+
+	if err != nil {
+		return nil, err
+	}
+
+	res := SetAnnouncementResponse{}
+
+	if err := c.sendRequest(req, &res); err != nil {
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+// Sets the Description for the channel.
+func (c *Client) SetDescriptionChannel(param *SetDescriptionRequest) (*SetDescriptionResponse, error) {
+	opt, _ := json.Marshal(param)
+
+	req, err := http.NewRequest("POST",
+		fmt.Sprintf("%s/%s/channels.setDescription", c.baseURL, c.apiVersion),
+		bytes.NewBuffer(opt))
+
+	if err != nil {
+		return nil, err
+	}
+
+	res := SetDescriptionResponse{}
+
+	if err := c.sendRequest(req, &res); err != nil {
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+// Sets the topic for the channel.
+func (c *Client) SetTopicChannel(param *SetTopicRequest) (*SetTopicResponse, error) {
+	opt, _ := json.Marshal(param)
+
+	req, err := http.NewRequest("POST",
+		fmt.Sprintf("%s/%s/channels.setTopic", c.baseURL, c.apiVersion),
+		bytes.NewBuffer(opt))
+
+	if err != nil {
+		return nil, err
+	}
+
+	res := SetTopicResponse{}
+
+	if err := c.sendRequest(req, &res); err != nil {
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+// Unarchive a channel.
+func (c *Client) UnarchiveChannel(param *SimpleChannelId) (*SimpleSuccessResponse, error) {
+	opt, _ := json.Marshal(param)
+
+	req, err := http.NewRequest("POST",
+		fmt.Sprintf("%s/%s/channels.unarchive", c.baseURL, c.apiVersion),
 		bytes.NewBuffer(opt))
 
 	if err != nil {
