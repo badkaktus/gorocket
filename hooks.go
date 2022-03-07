@@ -40,7 +40,8 @@ func (c *Client) Hooks(msg *HookMessage, token string) (*HookResponse, error) {
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	if err != nil {
-		log.Fatal("Request error")
+		log.Println("Request error")
+		return nil, err
 	}
 
 	res, err := c.HTTPClient.Do(req)
@@ -48,7 +49,8 @@ func (c *Client) Hooks(msg *HookMessage, token string) (*HookResponse, error) {
 	defer res.Body.Close()
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return nil, err
 	}
 
 	resp := HookResponse{}

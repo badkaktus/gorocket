@@ -36,18 +36,13 @@ func (c *Client) sendRequest(req *http.Request, v interface{}) error {
 
 	res, err := c.HTTPClient.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return err
 	}
 
 	defer res.Body.Close()
-	//	body, err := ioutil.ReadAll(res.Body)
-	//fmt.Println(string(body))
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
 
 	resp := v
-
 	if err = json.NewDecoder(res.Body).Decode(&resp); err != nil {
 		return err
 	}
