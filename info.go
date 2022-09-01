@@ -9,14 +9,14 @@ import (
 type RespInfo struct {
 	Info struct {
 		Version               string `json:"version"`
-		Build                 build  `json:"build"`
-		Commit                commit `json:"commit"`
+		Build                 Build  `json:"build"`
+		Commit                Commit `json:"commit"`
 		MarketplaceAPIVersion string `json:"marketplaceApiVersion"`
 	} `json:"info"`
 	Success bool `json:"success"`
 }
 
-type build struct {
+type Build struct {
 	Date        time.Time `json:"date"`
 	NodeVersion string    `json:"nodeVersion"`
 	Arch        string    `json:"arch"`
@@ -27,7 +27,7 @@ type build struct {
 	Cpus        int       `json:"cpus"`
 }
 
-type commit struct {
+type Commit struct {
 	Hash    string `json:"hash"`
 	Date    string `json:"date"`
 	Author  string `json:"author"`
@@ -37,24 +37,24 @@ type commit struct {
 }
 
 type RespDirectory struct {
-	Result  []result `json:"result"`
+	Result  []Result `json:"result"`
 	Count   int      `json:"count"`
 	Offset  int      `json:"offset"`
 	Total   int      `json:"total"`
 	Success bool     `json:"success"`
 }
 
-type result struct {
+type Result struct {
 	ID          string      `json:"_id"`
 	Ts          time.Time   `json:"ts"`
 	T           string      `json:"t"`
 	Name        string      `json:"name"`
 	UsersCount  int         `json:"usersCount"`
 	Default     bool        `json:"default"`
-	LastMessage lastMessage `json:"lastMessage"`
+	LastMessage LastMessage `json:"lastMessage"`
 }
 
-type lastMessage struct {
+type LastMessage struct {
 	ID          string        `json:"_id"`
 	Alias       string        `json:"alias"`
 	Msg         string        `json:"msg"`
@@ -62,27 +62,27 @@ type lastMessage struct {
 	ParseUrls   bool          `json:"parseUrls"`
 	Groupable   bool          `json:"groupable"`
 	Ts          time.Time     `json:"ts"`
-	U           u             `json:"u"`
+	U           U             `json:"u"`
 	Rid         string        `json:"rid"`
 	UpdatedAt   time.Time     `json:"_updatedAt"`
 	Mentions    []interface{} `json:"mentions"`
 	Channels    []interface{} `json:"channels"`
 }
 
-type u struct {
+type U struct {
 	ID       string `json:"_id"`
 	Username string `json:"username"`
 	Name     string `json:"name,omitempty"`
 }
 
 type RespSpotlight struct {
-	Users   []usersInfo `json:"users"`
-	Rooms   []roomsInfo `json:"rooms"`
+	Users   []UsersInfo `json:"users"`
+	Rooms   []RoomsInfo `json:"rooms"`
 	Success bool        `json:"success"`
 	Error   string      `json:"error,omitempty"`
 }
 
-type usersInfo struct {
+type UsersInfo struct {
 	ID         string `json:"_id"`
 	Status     string `json:"status"`
 	Name       string `json:"name"`
@@ -90,16 +90,16 @@ type usersInfo struct {
 	StatusText string `json:"statusText"`
 }
 
-type roomsInfo struct {
+type RoomsInfo struct {
 	ID          string      `json:"_id"`
 	Name        string      `json:"name"`
 	T           string      `json:"t"`
-	LastMessage lastMessage `json:"lastMessage"`
+	LastMessage LastMessage `json:"lastMessage"`
 }
 
 type RespStatistics struct {
 	ID                        string       `json:"_id"`
-	Wizard                    wizard       `json:"wizard"`
+	Wizard                    Wizard       `json:"wizard"`
 	UniqueID                  string       `json:"uniqueId"`
 	InstalledAt               time.Time    `json:"installedAt"`
 	Version                   string       `json:"version"`
@@ -132,32 +132,32 @@ type RespStatistics struct {
 	LastLogin                 time.Time    `json:"lastLogin"`
 	LastMessageSentAt         time.Time    `json:"lastMessageSentAt"`
 	LastSeenSubscription      time.Time    `json:"lastSeenSubscription"`
-	Os                        os           `json:"os"`
-	Process                   process      `json:"process"`
-	Deploy                    deploy       `json:"deploy"`
+	Os                        Os           `json:"os"`
+	Process                   Process      `json:"process"`
+	Deploy                    Deploy       `json:"deploy"`
 	EnterpriseReady           bool         `json:"enterpriseReady"`
 	UploadsTotal              int          `json:"uploadsTotal"`
 	UploadsTotalSize          int          `json:"uploadsTotalSize"`
-	Migration                 migration    `json:"migration"`
+	Migration                 Migration    `json:"migration"`
 	InstanceCount             int          `json:"instanceCount"`
 	OplogEnabled              bool         `json:"oplogEnabled"`
 	MongoVersion              string       `json:"mongoVersion"`
 	MongoStorageEngine        string       `json:"mongoStorageEngine"`
-	UniqueUsersOfYesterday    stats        `json:"uniqueUsersOfYesterday"`
-	UniqueUsersOfLastMonth    stats        `json:"uniqueUsersOfLastMonth"`
-	UniqueDevicesOfYesterday  stats        `json:"uniqueDevicesOfYesterday"`
-	UniqueDevicesOfLastMonth  stats        `json:"uniqueDevicesOfLastMonth"`
-	UniqueOSOfYesterday       stats        `json:"uniqueOSOfYesterday"`
-	UniqueOSOfLastMonth       stats        `json:"uniqueOSOfLastMonth"`
-	Apps                      apps         `json:"apps"`
-	Integrations              integrations `json:"integrations"`
+	UniqueUsersOfYesterday    Stats        `json:"uniqueUsersOfYesterday"`
+	UniqueUsersOfLastMonth    Stats        `json:"uniqueUsersOfLastMonth"`
+	UniqueDevicesOfYesterday  Stats        `json:"uniqueDevicesOfYesterday"`
+	UniqueDevicesOfLastMonth  Stats        `json:"uniqueDevicesOfLastMonth"`
+	UniqueOSOfYesterday       Stats        `json:"uniqueOSOfYesterday"`
+	UniqueOSOfLastMonth       Stats        `json:"uniqueOSOfLastMonth"`
+	Apps                      Apps         `json:"apps"`
+	Integrations              Integrations `json:"integrations"`
 	PushQueue                 int          `json:"pushQueue"`
 	CreatedAt                 time.Time    `json:"createdAt"`
 	UpdatedAt                 time.Time    `json:"_updatedAt"`
 	Success                   bool         `json:"success"`
 }
 
-type wizard struct {
+type Wizard struct {
 	OrganizationType string `json:"organizationType"`
 	Industry         string `json:"industry"`
 	Size             string `json:"size"`
@@ -167,7 +167,7 @@ type wizard struct {
 	RegisterServer   bool   `json:"registerServer"`
 }
 
-type os struct {
+type Os struct {
 	Type     string    `json:"type"`
 	Platform string    `json:"platform"`
 	Arch     string    `json:"arch"`
@@ -176,16 +176,16 @@ type os struct {
 	Loadavg  []float64 `json:"loadavg"`
 	Totalmem int64     `json:"totalmem"`
 	Freemem  int       `json:"freemem"`
-	Cpus     []cpus    `json:"cpus"`
+	Cpus     []Cpus    `json:"cpus"`
 }
 
-type cpus struct {
+type Cpus struct {
 	Model string `json:"model"`
 	Speed int    `json:"speed"`
-	Times times  `json:"times"`
+	Times Times  `json:"times"`
 }
 
-type times struct {
+type Times struct {
 	User int `json:"user"`
 	Nice int `json:"nice"`
 	Sys  int `json:"sys"`
@@ -193,20 +193,20 @@ type times struct {
 	Irq  int `json:"irq"`
 }
 
-type process struct {
+type Process struct {
 	NodeVersion string  `json:"nodeVersion"`
 	Pid         int     `json:"pid"`
 	Uptime      float64 `json:"uptime"`
 }
 
-type apps struct {
+type Apps struct {
 	EngineVersion  string `json:"engineVersion"`
 	Enabled        bool   `json:"enabled"`
 	TotalInstalled int    `json:"totalInstalled"`
 	TotalActive    int    `json:"totalActive"`
 }
 
-type integrations struct {
+type Integrations struct {
 	TotalIntegrations      int `json:"totalIntegrations"`
 	TotalIncoming          int `json:"totalIncoming"`
 	TotalIncomingActive    int `json:"totalIncomingActive"`
@@ -215,20 +215,20 @@ type integrations struct {
 	TotalWithScriptEnabled int `json:"totalWithScriptEnabled"`
 }
 
-type stats struct {
+type Stats struct {
 	Year  int           `json:"year"`
 	Month int           `json:"month"`
 	Day   int           `json:"day"`
 	Data  []interface{} `json:"data"`
 }
 
-type migration struct {
+type Migration struct {
 	ID      string `json:"_id"`
 	Locked  bool   `json:"locked"`
 	Version int    `json:"version"`
 }
 
-type deploy struct {
+type Deploy struct {
 	Method   string `json:"method"`
 	Platform string `json:"platform"`
 }
@@ -236,7 +236,7 @@ type deploy struct {
 type RespStatisticsList struct {
 	Statistics []struct {
 		ID                        string       `json:"_id"`
-		Wizard                    wizard       `json:"wizard"`
+		Wizard                    Wizard       `json:"wizard"`
 		UniqueID                  string       `json:"uniqueId"`
 		InstalledAt               time.Time    `json:"installedAt"`
 		Version                   string       `json:"version"`
@@ -265,25 +265,25 @@ type RespStatisticsList struct {
 		TotalMessages             int          `json:"totalMessages"`
 		FederatedServers          int          `json:"federatedServers"`
 		FederatedUsers            int          `json:"federatedUsers"`
-		Os                        os           `json:"os"`
-		Process                   process      `json:"process"`
-		Deploy                    deploy       `json:"deploy"`
+		Os                        Os           `json:"os"`
+		Process                   Process      `json:"process"`
+		Deploy                    Deploy       `json:"deploy"`
 		EnterpriseReady           bool         `json:"enterpriseReady"`
 		UploadsTotal              int          `json:"uploadsTotal"`
 		UploadsTotalSize          int          `json:"uploadsTotalSize"`
-		Migration                 migration    `json:"migration"`
+		Migration                 Migration    `json:"migration"`
 		InstanceCount             int          `json:"instanceCount"`
 		OplogEnabled              bool         `json:"oplogEnabled"`
 		MongoVersion              string       `json:"mongoVersion"`
 		MongoStorageEngine        string       `json:"mongoStorageEngine"`
-		UniqueUsersOfYesterday    stats        `json:"uniqueUsersOfYesterday"`
-		UniqueUsersOfLastMonth    stats        `json:"uniqueUsersOfLastMonth"`
-		UniqueDevicesOfYesterday  stats        `json:"uniqueDevicesOfYesterday"`
-		UniqueDevicesOfLastMonth  stats        `json:"uniqueDevicesOfLastMonth"`
-		UniqueOSOfYesterday       stats        `json:"uniqueOSOfYesterday"`
-		UniqueOSOfLastMonth       stats        `json:"uniqueOSOfLastMonth"`
-		Apps                      apps         `json:"apps"`
-		Integrations              integrations `json:"integrations"`
+		UniqueUsersOfYesterday    Stats        `json:"uniqueUsersOfYesterday"`
+		UniqueUsersOfLastMonth    Stats        `json:"uniqueUsersOfLastMonth"`
+		UniqueDevicesOfYesterday  Stats        `json:"uniqueDevicesOfYesterday"`
+		UniqueDevicesOfLastMonth  Stats        `json:"uniqueDevicesOfLastMonth"`
+		UniqueOSOfYesterday       Stats        `json:"uniqueOSOfYesterday"`
+		UniqueOSOfLastMonth       Stats        `json:"uniqueOSOfLastMonth"`
+		Apps                      Apps         `json:"apps"`
+		Integrations              Integrations `json:"integrations"`
 		PushQueue                 int          `json:"pushQueue"`
 		CreatedAt                 time.Time    `json:"createdAt"`
 		UpdatedAt                 time.Time    `json:"_updatedAt"`

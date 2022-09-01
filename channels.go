@@ -14,17 +14,17 @@ type AddAllRequest struct {
 }
 
 type AddAllResponse struct {
-	Channel channel `json:"channel"`
+	Channel Channel `json:"channel"`
 	Success bool    `json:"success"`
 }
 
-type channel struct {
+type Channel struct {
 	ID        string    `json:"_id"`
 	Name      string    `json:"name"`
 	T         string    `json:"t"`
 	Usernames []string  `json:"usernames"`
 	Msgs      int       `json:"msgs"`
-	U         u         `json:"u"`
+	U         U         `json:"u"`
 	Ts        time.Time `json:"ts"`
 }
 
@@ -56,7 +56,7 @@ type CreateChannelRequest struct {
 }
 
 type CreateChannelResponse struct {
-	Channel channel `json:"channel"`
+	Channel Channel `json:"channel"`
 	Success bool    `json:"success"`
 }
 
@@ -76,18 +76,18 @@ type ChannelHistoryRequest struct {
 }
 
 type ChannelInfoResponse struct {
-	Channel channelInfo `json:"channel"`
+	Channel ChannelInfo `json:"channel"`
 	Success bool        `json:"success"`
 }
 
-type channelInfo struct {
+type ChannelInfo struct {
 	ID           string `json:"_id"`
 	Name         string `json:"name"`
 	Fname        string `json:"fname"`
 	T            string `json:"t"`
 	Msgs         int    `json:"msgs"`
 	UsersCount   int    `json:"usersCount"`
-	U            uChat  `json:"u"`
+	U            UChat  `json:"u"`
 	CustomFields struct {
 	} `json:"customFields"`
 	Broadcast bool      `json:"broadcast"`
@@ -119,20 +119,20 @@ type InviteChannelResponse struct {
 }
 
 type ChannelListResponse struct {
-	Channels []channelList `json:"channels"`
+	Channels []ChannelList `json:"channels"`
 	Offset   int           `json:"offset"`
 	Count    int           `json:"count"`
 	Total    int           `json:"total"`
 	Success  bool          `json:"success"`
 }
 
-type channelList struct {
+type ChannelList struct {
 	ID        string    `json:"_id"`
 	Name      string    `json:"name"`
 	T         string    `json:"t"`
 	Usernames []string  `json:"usernames"`
 	Msgs      int       `json:"msgs"`
-	U         uChat     `json:"u"`
+	U         UChat     `json:"u"`
 	Ts        time.Time `json:"ts"`
 	Ro        bool      `json:"ro"`
 	SysMes    bool      `json:"sysMes"`
@@ -140,14 +140,14 @@ type channelList struct {
 }
 
 type ChannelMembersResponse struct {
-	Members []member `json:"members"`
+	Members []Member `json:"members"`
 	Count   int      `json:"count"`
 	Offset  int      `json:"offset"`
 	Total   int      `json:"total"`
 	Success bool     `json:"success"`
 }
 
-type member struct {
+type Member struct {
 	ID       string `json:"_id"`
 	Username string `json:"username"`
 	Name     string `json:"name"`
@@ -160,7 +160,7 @@ type RenameChannelRequest struct {
 }
 
 type RenameChannelResponse struct {
-	Channel channelList `json:"channel"`
+	Channel ChannelList `json:"channel"`
 	Success bool        `json:"success"`
 }
 

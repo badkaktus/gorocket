@@ -15,58 +15,58 @@ type Message struct {
 	Emoji       string       `json:"emoji,omitempty"`
 	RoomID      string       `json:"roomId,omitempty"`
 	Text        string       `json:"text"`
-	Attachments []attachment `json:"attachments"`
+	Attachments []Attachment `json:"attachments"`
 }
 
-type attachment struct {
-	AudioURL          string        `json:"audio_url"`
-	AuthorIcon        string        `json:"author_icon"`
-	AuthorLink        string        `json:"author_link"`
-	AuthorName        string        `json:"author_name"`
-	Collapsed         bool          `json:"collapsed"`
-	Color             string        `json:"color"`
-	Fields            []attachField `json:"fields"`
-	ImageURL          string        `json:"image_url"`
-	MessageLink       string        `json:"message_link"`
-	Text              string        `json:"text"`
-	ThumbURL          string        `json:"thumb_url"`
-	Title             string        `json:"title"`
-	TitleLink         string        `json:"title_link"`
-	TitleLinkDownload bool          `json:"title_link_download"`
-	Ts                time.Time     `json:"ts"`
-	VideoURL          string        `json:"video_url"`
+type Attachment struct {
+	AudioURL          string        `json:"audio_url,omitempty"`
+	AuthorIcon        string        `json:"author_icon,omitempty"`
+	AuthorLink        string        `json:"author_link,omitempty"`
+	AuthorName        string        `json:"author_name,omitempty"`
+	Collapsed         bool          `json:"collapsed,omitempty"`
+	Color             string        `json:"color,omitempty"`
+	Fields            []AttachField `json:"fields,omitempty"`
+	ImageURL          string        `json:"image_url,omitempty"`
+	MessageLink       string        `json:"message_link,omitempty"`
+	Text              string        `json:"text,omitempty"`
+	ThumbURL          string        `json:"thumb_url,omitempty"`
+	Title             string        `json:"title,omitempty"`
+	TitleLink         string        `json:"title_link,omitempty"`
+	TitleLinkDownload bool          `json:"title_link_download,omitempty"`
+	Ts                time.Time     `json:"ts,omitempty"`
+	VideoURL          string        `json:"video_url,omitempty"`
 }
 
-type attachField struct {
-	Short bool   `json:"short"`
-	Title string `json:"title"`
-	Value string `json:"value"`
+type AttachField struct {
+	Short bool   `json:"short,omitempty"`
+	Title string `json:"title,omitempty"`
+	Value string `json:"value,omitempty"`
 }
 
 type RespPostMessage struct {
 	Ts        int64           `json:"ts"`
 	Channel   string          `json:"channel"`
-	Message   respMessageData `json:"message"`
+	Message   RespMessageData `json:"message"`
 	Success   bool            `json:"success"`
 	Error     string          `json:"error,omitempty"`
 	ErrorType string          `json:"errorType,omitempty"`
 }
 
-type respMessageData struct {
-	Alias     string    `json:"alias"`
-	Msg       string    `json:"msg"`
-	ParseUrls bool      `json:"parseUrls"`
-	Groupable bool      `json:"groupable"`
-	Ts        time.Time `json:"ts"`
-	U         uChat     `json:"u"`
-	Rid       string    `json:"rid"`
-	UpdatedAt time.Time `json:"_updatedAt"`
-	ID        string    `json:"_id"`
+type RespMessageData struct {
+	Alias     string    `json:"alias,omitempty"`
+	Msg       string    `json:"msg,omitempty"`
+	ParseUrls bool      `json:"parseUrls,omitempty"`
+	Groupable bool      `json:"groupable,omitempty"`
+	Ts        time.Time `json:"ts,omitempty"`
+	U         UChat     `json:"u,omitempty"`
+	Rid       string    `json:"rid,omitempty"`
+	UpdatedAt time.Time `json:"_updatedAt,omitempty"`
+	ID        string    `json:"_id,omitempty"`
 }
 
-type uChat struct {
-	ID       string `json:"_id"`
-	Username string `json:"username"`
+type UChat struct {
+	ID       string `json:"_id,omitempty"`
+	Username string `json:"username,omitempty"`
 }
 
 type SingleMessageId struct {
@@ -74,11 +74,11 @@ type SingleMessageId struct {
 }
 
 type GetMessageResponse struct {
-	Message message `json:"message"`
-	Success bool    `json:"success"`
+	Message MessageResp `json:"message"`
+	Success bool        `json:"success"`
 }
 
-type message struct {
+type MessageResp struct {
 	ID  string    `json:"_id"`
 	Rid string    `json:"rid"`
 	Msg string    `json:"msg"`
@@ -108,14 +108,14 @@ type GetPinnedMsgRequest struct {
 }
 
 type GetPinnedMsgResponse struct {
-	Messages []pinnedMessage `json:"messages"`
+	Messages []PinnedMessage `json:"messages"`
 	Count    int             `json:"count"`
 	Offset   int             `json:"offset"`
 	Total    int             `json:"total"`
 	Success  bool            `json:"success"`
 }
 
-type pinnedMessage struct {
+type PinnedMessage struct {
 	ID  string    `json:"_id"`
 	Rid string    `json:"rid"`
 	Msg string    `json:"msg"`

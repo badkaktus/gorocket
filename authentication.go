@@ -15,21 +15,21 @@ type LoginPayload struct {
 }
 
 type LoginResponse struct {
-	Status  string `json:"status"`
-	Data    data   `json:"data"`
-	Message string `json:"message,omitempty"`
+	Status  string    `json:"status"`
+	Data    DataLogin `json:"data"`
+	Message string    `json:"message,omitempty"`
 }
 
-type data struct {
+type DataLogin struct {
 	UserID    string `json:"userId"`
 	AuthToken string `json:"authToken"`
-	Me        me     `json:"me"`
+	Me        Me     `json:"me"`
 }
 
-type me struct {
+type Me struct {
 	ID                    string    `json:"_id"`
-	Services              services  `json:"services"`
-	Emails                []email   `json:"emails"`
+	Services              Services  `json:"services"`
+	Emails                []Email   `json:"emails"`
 	Status                string    `json:"status"`
 	Active                bool      `json:"active"`
 	UpdatedAt             time.Time `json:"_updatedAt"`
@@ -39,7 +39,7 @@ type me struct {
 	Username              string    `json:"username"`
 	UtcOffset             int       `json:"utcOffset"`
 	StatusText            string    `json:"statusText"`
-	Settings              settings  `json:"settings"`
+	Settings              Settings  `json:"settings"`
 	AvatarOrigin          string    `json:"avatarOrigin"`
 	RequirePasswordChange bool      `json:"requirePasswordChange"`
 	Language              string    `json:"language"`
@@ -47,29 +47,29 @@ type me struct {
 	AvatarURL             string    `json:"avatarUrl"`
 }
 
-type services struct {
-	Password password `json:"password"`
+type Services struct {
+	Password Password `json:"password"`
 }
 
-type password struct {
+type Password struct {
 	Bcrypt string `json:"bcrypt"`
 }
 
-type email struct {
+type Email struct {
 	Address  string `json:"address"`
 	Verified bool   `json:"verified"`
 }
 
-type settings struct {
-	Preferences preferences `json:"preferences"`
+type Settings struct {
+	Preferences Preferences `json:"preferences"`
 }
 
-type dontAskAgainList struct {
+type DontAskAgainList struct {
 	Action string `json:"action"`
 	Label  string `json:"label"`
 }
 
-type preferences struct {
+type Preferences struct {
 	EnableAutoAway                        bool               `json:"enableAutoAway"`
 	IdleTimeLimit                         int                `json:"idleTimeLimit"`
 	AudioNotifications                    string             `json:"audioNotifications"`
@@ -101,7 +101,7 @@ type preferences struct {
 	DesktopNotificationRequireInteraction bool               `json:"desktopNotificationRequireInteraction"`
 	SidebarSortby                         string             `json:"sidebarSortby"`
 	DesktopNotificationDuration           int                `json:"desktopNotificationDuration"`
-	DontAskAgainList                      []dontAskAgainList `json:"dontAskAgainList"`
+	DontAskAgainList                      []DontAskAgainList `json:"dontAskAgainList"`
 	Highlights                            []interface{}      `json:"highlights"`
 	Language                              string             `json:"language"`
 }
@@ -115,8 +115,8 @@ type LogoutResponse struct {
 
 type MeResponse struct {
 	ID                    string    `json:"_id"`
-	Services              services  `json:"services"`
-	Emails                []email   `json:"emails"`
+	Services              Services  `json:"services"`
+	Emails                []Email   `json:"emails"`
 	Status                string    `json:"status"`
 	Active                bool      `json:"active"`
 	UpdatedAt             time.Time `json:"_updatedAt"`
@@ -126,7 +126,7 @@ type MeResponse struct {
 	Username              string    `json:"username"`
 	UtcOffset             int       `json:"utcOffset"`
 	StatusText            string    `json:"statusText"`
-	Settings              settings  `json:"settings"`
+	Settings              Settings  `json:"settings"`
 	AvatarOrigin          string    `json:"avatarOrigin"`
 	RequirePasswordChange bool      `json:"requirePasswordChange"`
 	Language              string    `json:"language"`
