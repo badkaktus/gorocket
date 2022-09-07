@@ -36,7 +36,7 @@ type CreateGroupRequest struct {
 }
 
 type CreateGroupResponse struct {
-	Group   channel `json:"group"`
+	Group   Channel `json:"group"`
 	Success bool    `json:"success"`
 }
 
@@ -57,7 +57,7 @@ type groupInfo struct {
 	T            string `json:"t"`
 	Msgs         int    `json:"msgs"`
 	UsersCount   int    `json:"usersCount"`
-	U            uChat  `json:"u"`
+	U            UChat  `json:"u"`
 	CustomFields struct {
 	} `json:"customFields"`
 	Broadcast bool      `json:"broadcast"`
@@ -102,7 +102,7 @@ type groupList struct {
 	T         string    `json:"t"`
 	Usernames []string  `json:"usernames"`
 	Msgs      int       `json:"msgs"`
-	U         uChat     `json:"u"`
+	U         UChat     `json:"u"`
 	Ts        time.Time `json:"ts"`
 	Ro        bool      `json:"ro"`
 	SysMes    bool      `json:"sysMes"`
@@ -110,7 +110,7 @@ type groupList struct {
 }
 
 type GroupMembersResponse struct {
-	Members []member `json:"members"`
+	Members []Member `json:"members"`
 	Count   int      `json:"count"`
 	Offset  int      `json:"offset"`
 	Total   int      `json:"total"`
@@ -125,6 +125,11 @@ type RenameGroupRequest struct {
 type RenameGroupResponse struct {
 	Group   groupList `json:"group"`
 	Success bool      `json:"success"`
+}
+
+type AddGroupPermissionRequest struct {
+	RoomId string `json:"roomId"`
+	UserId string `json:"userId"`
 }
 
 // Archives a group.
@@ -405,6 +410,56 @@ func (c *Client) RenameGroup(param *RenameGroupRequest) (*RenameGroupResponse, e
 	}
 
 	res := RenameGroupResponse{}
+
+	if err := c.sendRequest(req, &res); err != nil {
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+// Add leader for the group.
+func (c *Client) AddLeaderGroup(param *AddGroupPermissionRequest) (*SimpleSuccessResponse, error) {
+	if param.UserId == "" && param.RoomId == "" {
+		return nil, fmt.Errorf("False parameters")
+	}
+
+	opt, _ := json.Marshal(param)
+
+	req, err := http.NewRequest("POST",
+		fmt.Sprintf("%s/%s/groups.addLeader", c.baseURL, c.apiVersion),
+		bytes.NewBuffer(opt))
+
+	if err != nil {
+		return nil, err
+	}
+
+	res := SimpleSuccessResponse{}
+
+	if err := c.sendRequest(req, &res); err != nil {
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+// Add owner for the group.
+func (c *Client) AddOwnerGroup(param *AddGroupPermissionRequest) (*SimpleSuccessResponse, error) {
+	if param.UserId == "" && param.RoomId == "" {
+		return nil, fmt.Errorf("False parameters")
+	}
+
+	opt, _ := json.Marshal(param)
+
+	req, err := http.NewRequest("POST",
+		fmt.Sprintf("%s/%s/groups.addOwner", c.baseURL, c.apiVersion),
+		bytes.NewBuffer(opt))
+
+	if err != nil {
+		return nil, err
+	}
+
+	res := SimpleSuccessResponse{}
 
 	if err := c.sendRequest(req, &res); err != nil {
 		return nil, err
