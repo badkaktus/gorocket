@@ -48,7 +48,7 @@ type userCreateInfo struct {
 	CreatedAt time.Time    `json:"createdAt"`
 	Services  userServices `json:"services"`
 	Username  string       `json:"username"`
-	Emails    []email      `json:"emails"`
+	Emails    []Email      `json:"emails"`
 	Type      string       `json:"type"`
 	Status    string       `json:"status"`
 	Active    bool         `json:"active"`
@@ -173,7 +173,7 @@ type userUpdateInfo struct {
 		} `json:"password"`
 	} `json:"services"`
 	Username  string    `json:"username"`
-	Emails    []email   `json:"emails"`
+	Emails    []Email   `json:"emails"`
 	Type      string    `json:"type"`
 	Status    string    `json:"status"`
 	Active    bool      `json:"active"`
