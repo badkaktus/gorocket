@@ -1,6 +1,7 @@
 package gorocket
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 	"net/http"
@@ -13,17 +14,30 @@ type Client struct {
 	xToken     string
 	apiVersion string
 	HTTPClient *http.Client
+
+	timeout time.Duration
 }
 
 // NewClient creates new Facest.io client with given API key
-func NewClient(opts ...Option) *Client {
-	c := &Client{
+func NewClient(url string) *Client {
+	return &Client{
 		//userID: user,
 		HTTPClient: &http.Client{
 			Timeout: 5 * time.Minute,
 		},
 		//xToken:     token,
-		// baseURL:    url,
+		baseURL:    url,
+		apiVersion: "api/v1",
+	}
+}
+
+// NewClient creates new Facest.io client with given API key
+func NewWithOptions(url string, opts ...Option) *Client {
+	c := &Client{
+		HTTPClient: &http.Client{
+			Timeout: 5 * time.Minute,
+		},
+		baseURL:    url,
 		apiVersion: "api/v1",
 	}
 
@@ -36,9 +50,9 @@ func NewClient(opts ...Option) *Client {
 
 type Option func(*Client)
 
-func WithUrl(url string) Option {
+func WithTimeout(d time.Duration) Option {
 	return func(c *Client) {
-		c.baseURL = url
+		c.timeout = d
 	}
 }
 
@@ -59,6 +73,13 @@ func (c *Client) sendRequest(req *http.Request, v interface{}) error {
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 	req.Header.Add("X-Auth-Token", c.xToken)
 	req.Header.Add("X-User-Id", c.userID)
+
+	if c.timeout > 0 {
+		ctx, cancel := context.WithTimeout(req.Context(), c.timeout)
+		defer cancel()
+
+		req = req.WithContext(ctx)
+	}
 
 	res, err := c.HTTPClient.Do(req)
 	if err != nil {

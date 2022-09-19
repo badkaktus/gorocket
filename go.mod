@@ -1,3 +1,3 @@
 module github.com/badkaktus/gorocket
 
-go 1.17
+go 1.13
