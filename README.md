@@ -31,6 +31,16 @@ if err != nil {
 fmt.Printf("I'm %s", lg.Data.Me.Username)
 ```
 
+or 
+
+```go
+client := gorocket.NewWithOptions("https://your-rocket-chat.com", 
+    gorocket.WithUserID("my-user-id"),
+    gorocket.WithToken("my-bot-token"),
+    gorocket.WithTimeout(1 * time.Second),
+)
+```
+
 ## Manage user
 ```go
 str := gorocket.NewUser{
