@@ -49,7 +49,7 @@ fmt.Printf("User was created %t", me.Success)
 ```
 
 ## Post a message
-```php
+```go
 // create a new channel
 str := gorocket.CreateChannelRequest{
     Name:     "newchannel",
