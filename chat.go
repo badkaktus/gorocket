@@ -247,10 +247,10 @@ func (c *Client) GetPinnedMessages(param *GetPinnedMsgRequest) (*GetPinnedMsgRes
 		url.Add("roomId", param.RoomId)
 	}
 	if param.Offset != 0 {
-		url.Add("offset", string(param.Offset))
+		url.Add("offset", fmt.Sprintf("%d", param.Offset))
 	}
 	if param.Count != 0 {
-		url.Add("count", string(param.Count))
+		url.Add("count", fmt.Sprintf("%d", param.Count))
 	}
 	req.URL.RawQuery = url.Encode()
 
