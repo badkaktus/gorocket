@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -159,7 +160,7 @@ type PinMessageResponse struct {
 	Success bool `json:"success"`
 }
 
-// Posts a new chat message.
+// PostMessage Posts a new chat message.
 func (c *Client) PostMessage(msg *Message) (*RespPostMessage, error) {
 
 	opt, _ := json.Marshal(msg)
@@ -181,7 +182,7 @@ func (c *Client) PostMessage(msg *Message) (*RespPostMessage, error) {
 	return &res, nil
 }
 
-// Retrieves a single chat message by the provided id.
+// GetMessage Retrieves a single chat message by the provided id.
 // Callee must have permission to access the room where the message resides.
 func (c *Client) GetMessage(param *SingleMessageId) (*GetMessageResponse, error) {
 	req, err := http.NewRequest("GET",
@@ -189,7 +190,7 @@ func (c *Client) GetMessage(param *SingleMessageId) (*GetMessageResponse, error)
 		nil)
 
 	if param.MessageId == "" {
-		return nil, fmt.Errorf("False parameters")
+		return nil, fmt.Errorf("false parameters")
 	}
 
 	url := req.URL.Query()
@@ -239,7 +240,7 @@ func (c *Client) GetPinnedMessages(param *GetPinnedMsgRequest) (*GetPinnedMsgRes
 		nil)
 
 	if param.RoomId == "" {
-		return nil, fmt.Errorf("False parameters")
+		return nil, fmt.Errorf("false parameters")
 	}
 
 	url := req.URL.Query()
@@ -247,10 +248,10 @@ func (c *Client) GetPinnedMessages(param *GetPinnedMsgRequest) (*GetPinnedMsgRes
 		url.Add("roomId", param.RoomId)
 	}
 	if param.Offset != 0 {
-		url.Add("offset", string(param.Offset))
+		url.Add("offset", strconv.Itoa(param.Offset))
 	}
 	if param.Count != 0 {
-		url.Add("count", string(param.Count))
+		url.Add("count", strconv.Itoa(param.Count))
 	}
 	req.URL.RawQuery = url.Encode()
 

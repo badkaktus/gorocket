@@ -89,14 +89,14 @@ type InviteGroupResponse struct {
 }
 
 type GroupListResponse struct {
-	Groups  []groupList `json:"groups"`
+	Groups  []GroupList `json:"groups"`
 	Offset  int         `json:"offset"`
 	Count   int         `json:"count"`
 	Total   int         `json:"total"`
 	Success bool        `json:"success"`
 }
 
-type groupList struct {
+type GroupList struct {
 	ID        string    `json:"_id"`
 	Name      string    `json:"name"`
 	T         string    `json:"t"`
@@ -123,16 +123,11 @@ type RenameGroupRequest struct {
 }
 
 type RenameGroupResponse struct {
-	Group   groupList `json:"group"`
+	Group   GroupList `json:"group"`
 	Success bool      `json:"success"`
 }
 
-type AddGroupPermissionRequest struct {
-	RoomId string `json:"roomId"`
-	UserId string `json:"userId"`
-}
-
-// Archives a group.
+// ArchiveGroup Archives a group.
 func (c *Client) ArchiveGroup(param *SimpleGroupId) (*SimpleSuccessResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -153,7 +148,7 @@ func (c *Client) ArchiveGroup(param *SimpleGroupId) (*SimpleSuccessResponse, err
 	return &res, nil
 }
 
-// Removes the group from the user's list of groups.
+// CloseGroup Removes the group from the user's list of groups.
 func (c *Client) CloseGroup(param *SimpleGroupId) (*SimpleSuccessResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -174,15 +169,14 @@ func (c *Client) CloseGroup(param *SimpleGroupId) (*SimpleSuccessResponse, error
 	return &res, nil
 }
 
-// Gets group counters.
+// GroupCounters Gets group counters.
 func (c *Client) GroupCounters(param *GroupCountersRequest) (*GroupCountersResponse, error) {
-
 	req, err := http.NewRequest("GET",
 		fmt.Sprintf("%s/%s/groups.counters", c.baseURL, c.apiVersion),
 		nil)
 
 	if param.RoomName == "" && param.RoomId == "" {
-		return nil, fmt.Errorf("False parameters")
+		return nil, fmt.Errorf("false parameters")
 	}
 
 	url := req.URL.Query()
@@ -207,7 +201,7 @@ func (c *Client) GroupCounters(param *GroupCountersRequest) (*GroupCountersRespo
 	return &res, nil
 }
 
-// Creates a new group.
+// CreateGroup Creates a new group.
 func (c *Client) CreateGroup(param *CreateGroupRequest) (*CreateGroupResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -228,7 +222,7 @@ func (c *Client) CreateGroup(param *CreateGroupRequest) (*CreateGroupResponse, e
 	return &res, nil
 }
 
-// Delete group.
+// DeleteGroup Delete group.
 func (c *Client) DeleteGroup(param *SimpleGroupId) (*SimpleSuccessResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -249,15 +243,14 @@ func (c *Client) DeleteGroup(param *SimpleGroupId) (*SimpleSuccessResponse, erro
 	return &res, nil
 }
 
-// Get group info.
+// GroupInfo Get group info.
 func (c *Client) GroupInfo(param *SimpleGroupRequest) (*GroupInfoResponse, error) {
-
 	req, err := http.NewRequest("GET",
 		fmt.Sprintf("%s/%s/groups.info", c.baseURL, c.apiVersion),
 		nil)
 
 	if param.RoomName == "" && param.RoomId == "" {
-		return nil, fmt.Errorf("False parameters")
+		return nil, fmt.Errorf("false parameters")
 	}
 
 	url := req.URL.Query()
@@ -282,7 +275,7 @@ func (c *Client) GroupInfo(param *SimpleGroupRequest) (*GroupInfoResponse, error
 	return &res, nil
 }
 
-// Adds a user to the group.
+// GroupInvite Adds a user to the group.
 func (c *Client) GroupInvite(param *InviteGroupRequest) (*InviteGroupResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -303,7 +296,7 @@ func (c *Client) GroupInvite(param *InviteGroupRequest) (*InviteGroupResponse, e
 	return &res, nil
 }
 
-// Kick a user from the group.
+// GroupKick Kick a user from the group.
 func (c *Client) GroupKick(param *InviteGroupRequest) (*InviteGroupResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -324,7 +317,7 @@ func (c *Client) GroupKick(param *InviteGroupRequest) (*InviteGroupResponse, err
 	return &res, nil
 }
 
-// Get groups list
+// GroupList Get groups list
 func (c *Client) GroupList() (*GroupListResponse, error) {
 	req, err := http.NewRequest("GET",
 		fmt.Sprintf("%s/%s/groups.list", c.baseURL, c.apiVersion),
@@ -343,15 +336,14 @@ func (c *Client) GroupList() (*GroupListResponse, error) {
 	return &res, nil
 }
 
-// Gets group members
+// GroupMembers Gets group members
 func (c *Client) GroupMembers(param *SimpleGroupRequest) (*GroupMembersResponse, error) {
-
 	req, err := http.NewRequest("GET",
 		fmt.Sprintf("%s/%s/groups.members", c.baseURL, c.apiVersion),
 		nil)
 
 	if param.RoomName == "" && param.RoomId == "" {
-		return nil, fmt.Errorf("False parameters")
+		return nil, fmt.Errorf("false parameters")
 	}
 
 	url := req.URL.Query()
@@ -376,7 +368,7 @@ func (c *Client) GroupMembers(param *SimpleGroupRequest) (*GroupMembersResponse,
 	return &res, nil
 }
 
-// Adds the group back to the user's list of groups.
+// OpenGroup Adds the group back to the user's list of groups.
 func (c *Client) OpenGroup(param *SimpleGroupId) (*SimpleSuccessResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -397,7 +389,7 @@ func (c *Client) OpenGroup(param *SimpleGroupId) (*SimpleSuccessResponse, error)
 	return &res, nil
 }
 
-// Changes a group's name.
+// RenameGroup Changes a group's name.
 func (c *Client) RenameGroup(param *RenameGroupRequest) (*RenameGroupResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -418,57 +410,7 @@ func (c *Client) RenameGroup(param *RenameGroupRequest) (*RenameGroupResponse, e
 	return &res, nil
 }
 
-// Add leader for the group.
-func (c *Client) AddLeaderGroup(param *AddGroupPermissionRequest) (*SimpleSuccessResponse, error) {
-	if param.UserId == "" && param.RoomId == "" {
-		return nil, fmt.Errorf("False parameters")
-	}
-
-	opt, _ := json.Marshal(param)
-
-	req, err := http.NewRequest("POST",
-		fmt.Sprintf("%s/%s/groups.addLeader", c.baseURL, c.apiVersion),
-		bytes.NewBuffer(opt))
-
-	if err != nil {
-		return nil, err
-	}
-
-	res := SimpleSuccessResponse{}
-
-	if err := c.sendRequest(req, &res); err != nil {
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-// Add owner for the group.
-func (c *Client) AddOwnerGroup(param *AddGroupPermissionRequest) (*SimpleSuccessResponse, error) {
-	if param.UserId == "" && param.RoomId == "" {
-		return nil, fmt.Errorf("False parameters")
-	}
-
-	opt, _ := json.Marshal(param)
-
-	req, err := http.NewRequest("POST",
-		fmt.Sprintf("%s/%s/groups.addOwner", c.baseURL, c.apiVersion),
-		bytes.NewBuffer(opt))
-
-	if err != nil {
-		return nil, err
-	}
-
-	res := SimpleSuccessResponse{}
-
-	if err := c.sendRequest(req, &res); err != nil {
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-// Sets the announcement for the group.
+// SetAnnouncementGroup Sets the announcement for the group.
 func (c *Client) SetAnnouncementGroup(param *SetAnnouncementRequest) (*SetAnnouncementResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -489,7 +431,7 @@ func (c *Client) SetAnnouncementGroup(param *SetAnnouncementRequest) (*SetAnnoun
 	return &res, nil
 }
 
-// Sets the Description for the group.
+// SetDescriptionGroup Sets the Description for the group.
 func (c *Client) SetDescriptionGroup(param *SetDescriptionRequest) (*SetDescriptionResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -510,7 +452,7 @@ func (c *Client) SetDescriptionGroup(param *SetDescriptionRequest) (*SetDescript
 	return &res, nil
 }
 
-// Sets the topic for the group.
+// SetTopicGroup Sets the topic for the group.
 func (c *Client) SetTopicGroup(param *SetTopicRequest) (*SetTopicResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -531,7 +473,7 @@ func (c *Client) SetTopicGroup(param *SetTopicRequest) (*SetTopicResponse, error
 	return &res, nil
 }
 
-// Unarchive a group.
+// UnarchiveGroup Unarchive a group.
 func (c *Client) UnarchiveGroup(param *SimpleGroupId) (*SimpleSuccessResponse, error) {
 	opt, _ := json.Marshal(param)
 

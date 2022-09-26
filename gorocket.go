@@ -15,7 +15,7 @@ type Client struct {
 	HTTPClient *http.Client
 }
 
-// NewClient creates new Facest.io client with given API key
+// NewClient creates new RocketChat client with given API key
 func NewClient(url string) *Client {
 	return &Client{
 		//userID: user,
