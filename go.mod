@@ -1,3 +1,3 @@
-module github.com/fkrasnovid/gorocket
+module github.com/badkaktus/gorocket
 
 go 1.13

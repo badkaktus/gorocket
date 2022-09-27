@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -247,10 +248,10 @@ func (c *Client) GetPinnedMessages(param *GetPinnedMsgRequest) (*GetPinnedMsgRes
 		url.Add("roomId", param.RoomId)
 	}
 	if param.Offset != 0 {
-		url.Add("offset", string(param.Offset))
+		url.Add("offset", strconv.Itoa(param.Offset))
 	}
 	if param.Count != 0 {
-		url.Add("count", string(param.Count))
+		url.Add("count", strconv.Itoa(param.Count))
 	}
 	req.URL.RawQuery = url.Encode()
 
