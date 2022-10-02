@@ -3,7 +3,6 @@ package gorocket
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"github.com/google/go-querystring/query"
 	"log"
 	"net/http"
