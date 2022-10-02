@@ -82,5 +82,14 @@ if err != nil {
 }
 fmt.Printf("Message was posted %t", msg.Success)
 ```
+
+## Pagination
+If endpoint support pagination, you can use that like this:
+```go
+// sort field in map. 1 - asc, -1 - desc
+srt := map[string]int{"_updatedAt": 1, "name": -1}
+
+client.Count(10).Offset(10).Sort(srt).ChannelList()
+```
 ## PS
 Feel free to create issue for add new endpoint to this client
