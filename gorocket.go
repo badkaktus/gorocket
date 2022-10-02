@@ -3,6 +3,8 @@ package gorocket
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+	"github.com/google/go-querystring/query"
 	"log"
 	"net/http"
 	"time"
@@ -18,7 +20,15 @@ type Client struct {
 	timeout time.Duration
 }
 
-// NewClient creates new Facest.io client with given API key
+type PaginationStruct struct {
+	Count  int    `url:"count,omitempty"`
+	Offset int    `url:"offset,omitempty"`
+	Sort   string `url:"sort,omitempty"`
+}
+
+var pagination PaginationStruct
+
+// NewClient creates new rocket.chat client with given API key
 func NewClient(url string) *Client {
 	return &Client{
 		//userID: user,
@@ -31,7 +41,7 @@ func NewClient(url string) *Client {
 	}
 }
 
-// NewClient creates new Facest.io client with given API key
+// NewWithOptions creates new rocket.chat client with options
 func NewWithOptions(url string, opts ...Option) *Client {
 	c := &Client{
 		HTTPClient: &http.Client{
@@ -81,11 +91,13 @@ func (c *Client) sendRequest(req *http.Request, v interface{}) error {
 		req = req.WithContext(ctx)
 	}
 
-	res, err := c.HTTPClient.Do(req)
+	res, err := c.HTTPClient.Do(c.addQueryParams(req))
 	if err != nil {
 		log.Println(err)
 		return err
 	}
+
+	c.cleanup()
 
 	defer res.Body.Close()
 
@@ -95,4 +107,41 @@ func (c *Client) sendRequest(req *http.Request, v interface{}) error {
 	}
 
 	return nil
+}
+
+func (c *Client) Count(val int) *Client {
+	pagination.Count = val
+	return c
+}
+
+func (c *Client) Offset(val int) *Client {
+	pagination.Offset = val
+	return c
+}
+
+func (c *Client) Sort(val map[string]int) *Client {
+	byteJson, err := json.Marshal(val)
+	if err != nil {
+		log.Printf("cant create sort. error: %s", err)
+		return c
+	}
+	pagination.Sort = string(byteJson)
+
+	return c
+}
+
+func (c *Client) addQueryParams(req *http.Request) *http.Request {
+	v, err := query.Values(pagination)
+	if err != nil {
+		log.Printf("error create query string: %s", err)
+		return req
+	}
+	req.URL.RawQuery = v.Encode()
+	return req
+}
+
+func (c *Client) cleanup() {
+	pagination.Sort = ""
+	pagination.Offset = 0
+	pagination.Count = 0
 }
