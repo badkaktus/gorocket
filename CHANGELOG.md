@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [v0.1.2] - 2022-10-02
+- Add pagination
+
 ## [v0.1.1] - 2022-09-20
 
 - Add semver version `v0.1.1` (see semver.org)
