@@ -135,7 +135,11 @@ func (c *Client) addQueryParams(req *http.Request) *http.Request {
 		log.Printf("error create query string: %s", err)
 		return req
 	}
-	req.URL.RawQuery = v.Encode()
+	q := req.URL.Query()
+	for k := range v {
+		q.Add(k, v.Get(k))
+	}
+	req.URL.RawQuery = q.Encode()
 	return req
 }
 
