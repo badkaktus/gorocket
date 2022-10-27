@@ -117,6 +117,27 @@ type GroupMembersResponse struct {
 	Success bool     `json:"success"`
 }
 
+type GroupMessage struct {
+	ID        string        `json:"_id"`
+	Rid       string        `json:"rid"`
+	Msg       string        `json:"msg"`
+	Ts        time.Time     `json:"ts"`
+	U         U             `json:"u"`
+	UpdatedAt time.Time     `json:"_updatedAt"`
+	Reactions []interface{} `json:"reactions"`
+	Mentions  []U           `json:"mentions"`
+	Channels  []interface{} `json:"channels"`
+	Starred   []interface{} `json:"starred"`
+}
+
+type GroupMessagesResponse struct {
+	Messages []GroupMessage `json:"messages"`
+	Count    int            `json:"count"`
+	Offset   int            `json:"offset"`
+	Total    int            `json:"total"`
+	Success  bool           `json:"success"`
+}
+
 type RenameGroupRequest struct {
 	RoomId  string `json:"roomId"`
 	NewName string `json:"name"`
@@ -368,6 +389,39 @@ func (c *Client) GroupMembers(param *SimpleGroupRequest) (*GroupMembersResponse,
 	}
 
 	res := GroupMembersResponse{}
+
+	if err := c.sendRequest(req, &res); err != nil {
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+// Gets group messages
+func (c *Client) GroupMessages(param *SimpleGroupRequest) (*GroupMessagesResponse, error) {
+
+	req, err := http.NewRequest("GET",
+		fmt.Sprintf("%s/%s/groups.messages", c.baseURL, c.apiVersion),
+		nil)
+
+	if param.RoomName == "" && param.RoomId == "" {
+		return nil, fmt.Errorf("False parameters")
+	}
+
+	url := req.URL.Query()
+	if param.RoomName != "" {
+		url.Add("roomName", param.RoomName)
+	}
+	if param.RoomId != "" {
+		url.Add("roomId", param.RoomId)
+	}
+	req.URL.RawQuery = url.Encode()
+
+	if err != nil {
+		return nil, err
+	}
+
+	res := GroupMessagesResponse{}
 
 	if err := c.sendRequest(req, &res); err != nil {
 		return nil, err
