@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [v0.1.3] - 2022-10-27
+- Bugfix: count/offset/sort overwrite other params
+- Add receive group messages (GroupMessage)
+
 ## [v0.1.2] - 2022-10-02
 - Add pagination
 
