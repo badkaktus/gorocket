@@ -16,12 +16,12 @@ type UsersPresenceResponse struct {
 }
 
 type user struct {
-	ID         string `json:"_id"`
-	Name       string `json:"name"`
-	Username   string `json:"username"`
-	Status     string `json:"status"`
-	UtcOffset  int    `json:"utcOffset"`
-	AvatarETag string `json:"avatarETag"`
+	ID         string  `json:"_id"`
+	Name       string  `json:"name"`
+	Username   string  `json:"username"`
+	Status     string  `json:"status"`
+	UtcOffset  float64 `json:"utcOffset"`
+	AvatarETag string  `json:"avatarETag"`
 }
 
 type NewUser struct {
@@ -119,14 +119,14 @@ type UsersInfoResponse struct {
 }
 
 type singleUserInfo struct {
-	ID         string `json:"_id"`
-	Type       string `json:"type"`
-	Status     string `json:"status"`
-	Active     bool   `json:"active"`
-	Name       string `json:"name"`
-	UtcOffset  int    `json:"utcOffset"`
-	Username   string `json:"username"`
-	AvatarETag string `json:"avatarETag,omitempty"`
+	ID         string  `json:"_id"`
+	Type       string  `json:"type"`
+	Status     string  `json:"status"`
+	Active     bool    `json:"active"`
+	Name       string  `json:"name"`
+	UtcOffset  float64 `json:"utcOffset"`
+	Username   string  `json:"username"`
+	AvatarETag string  `json:"avatarETag,omitempty"`
 }
 
 type UserRegisterRequest struct {

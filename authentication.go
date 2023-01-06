@@ -37,7 +37,7 @@ type Me struct {
 	Name                  string    `json:"name"`
 	StatusConnection      string    `json:"statusConnection"`
 	Username              string    `json:"username"`
-	UtcOffset             int       `json:"utcOffset"`
+	UtcOffset             float64   `json:"utcOffset"`
 	StatusText            string    `json:"statusText"`
 	Settings              Settings  `json:"settings"`
 	AvatarOrigin          string    `json:"avatarOrigin"`
@@ -124,7 +124,7 @@ type MeResponse struct {
 	Name                  string    `json:"name"`
 	StatusConnection      string    `json:"statusConnection"`
 	Username              string    `json:"username"`
-	UtcOffset             int       `json:"utcOffset"`
+	UtcOffset             float64   `json:"utcOffset"`
 	StatusText            string    `json:"statusText"`
 	Settings              Settings  `json:"settings"`
 	AvatarOrigin          string    `json:"avatarOrigin"`
