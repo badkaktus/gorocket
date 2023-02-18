@@ -15,7 +15,7 @@ type LoginPayload struct {
 }
 
 type LoginResponse struct {
-	Status  string    `json:"status"`
+	ErrStatus
 	Data    DataLogin `json:"data"`
 	Message string    `json:"message,omitempty"`
 }
@@ -107,13 +107,14 @@ type Preferences struct {
 }
 
 type LogoutResponse struct {
-	Status string `json:"status"`
-	Data   struct {
+	ErrStatus
+	Data struct {
 		Message string `json:"message"`
 	} `json:"data"`
 }
 
 type MeResponse struct {
+	ErrStatus
 	ID                    string    `json:"_id"`
 	Services              Services  `json:"services"`
 	Emails                []Email   `json:"emails"`
@@ -132,7 +133,6 @@ type MeResponse struct {
 	Language              string    `json:"language"`
 	Email                 string    `json:"email"`
 	AvatarURL             string    `json:"avatarUrl"`
-	Success               bool      `json:"success"`
 }
 
 func (c *Client) Login(login *LoginPayload) (*LoginResponse, error) {

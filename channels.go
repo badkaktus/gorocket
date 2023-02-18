@@ -14,8 +14,8 @@ type AddAllRequest struct {
 }
 
 type AddAllResponse struct {
+	ErrStatus
 	Channel Channel `json:"channel"`
-	Success bool    `json:"success"`
 }
 
 type Channel struct {
@@ -39,6 +39,7 @@ type ChannelCountersRequest struct {
 }
 
 type ChannelCountersResponse struct {
+	ErrStatus
 	Joined       bool      `json:"joined"`
 	Members      int       `json:"members"`
 	Unreads      int       `json:"unreads"`
@@ -46,7 +47,6 @@ type ChannelCountersResponse struct {
 	Msgs         int       `json:"msgs"`
 	Latest       time.Time `json:"latest"`
 	UserMentions int       `json:"userMentions"`
-	Success      bool      `json:"success"`
 }
 
 type CreateChannelRequest struct {
@@ -56,8 +56,8 @@ type CreateChannelRequest struct {
 }
 
 type CreateChannelResponse struct {
+	ErrStatus
 	Channel Channel `json:"channel"`
-	Success bool    `json:"success"`
 }
 
 type SimpleChannelRequest struct {
@@ -76,8 +76,8 @@ type ChannelHistoryRequest struct {
 }
 
 type ChannelInfoResponse struct {
+	ErrStatus
 	Channel ChannelInfo `json:"channel"`
-	Success bool        `json:"success"`
 }
 
 type ChannelInfo struct {
@@ -105,6 +105,7 @@ type InviteChannelRequest struct {
 }
 
 type InviteChannelResponse struct {
+	ErrStatus
 	Channel struct {
 		ID        string    `json:"_id"`
 		Ts        time.Time `json:"ts"`
@@ -115,15 +116,14 @@ type InviteChannelResponse struct {
 		UpdatedAt time.Time `json:"_updatedAt"`
 		Lm        time.Time `json:"lm"`
 	} `json:"channel"`
-	Success bool `json:"success"`
 }
 
 type ChannelListResponse struct {
+	ErrStatus
 	Channels []ChannelList `json:"channels"`
 	Offset   int           `json:"offset"`
 	Count    int           `json:"count"`
 	Total    int           `json:"total"`
-	Success  bool          `json:"success"`
 }
 
 type ChannelList struct {
@@ -140,18 +140,18 @@ type ChannelList struct {
 }
 
 type ChannelMembersResponse struct {
+	ErrStatus
 	Members []Member `json:"members"`
 	Count   int      `json:"count"`
 	Offset  int      `json:"offset"`
 	Total   int      `json:"total"`
-	Success bool     `json:"success"`
 }
 
 type Member struct {
+	ErrStatus
 	ID       string `json:"_id"`
 	Username string `json:"username"`
 	Name     string `json:"name"`
-	Status   string `json:"status"`
 }
 
 type RenameChannelRequest struct {
@@ -160,8 +160,8 @@ type RenameChannelRequest struct {
 }
 
 type RenameChannelResponse struct {
+	ErrStatus
 	Channel ChannelList `json:"channel"`
-	Success bool        `json:"success"`
 }
 
 type SetAnnouncementRequest struct {
@@ -170,8 +170,8 @@ type SetAnnouncementRequest struct {
 }
 
 type SetAnnouncementResponse struct {
+	ErrStatus
 	Announcement string `json:"announcement"`
-	Success      bool   `json:"success"`
 }
 
 type SetDescriptionRequest struct {
@@ -180,8 +180,8 @@ type SetDescriptionRequest struct {
 }
 
 type SetDescriptionResponse struct {
+	ErrStatus
 	Description string `json:"description"`
-	Success     bool   `json:"success"`
 }
 
 type SetTopicRequest struct {
@@ -190,11 +190,11 @@ type SetTopicRequest struct {
 }
 
 type SetTopicResponse struct {
-	Topic   string `json:"topic"`
-	Success bool   `json:"success"`
+	ErrStatus
+	Topic string `json:"topic"`
 }
 
-// Adds all of the users on the server to a channel.
+// AddAllToChannel adds all of the users on the server to a channel.
 func (c *Client) AddAllToChannel(params *AddAllRequest) (*AddAllResponse, error) {
 	opt, _ := json.Marshal(params)
 
@@ -215,7 +215,7 @@ func (c *Client) AddAllToChannel(params *AddAllRequest) (*AddAllResponse, error)
 	return &res, nil
 }
 
-// Archives a channel.
+// ArchiveChannel archives a channel.
 func (c *Client) ArchiveChannel(param *SimpleChannelId) (*SimpleSuccessResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -236,7 +236,7 @@ func (c *Client) ArchiveChannel(param *SimpleChannelId) (*SimpleSuccessResponse,
 	return &res, nil
 }
 
-// Removes the channel from the user's list of channels.
+// CloseChannel removes the channel from the user's list of channels.
 func (c *Client) CloseChannel(param *SimpleChannelId) (*SimpleSuccessResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -257,7 +257,7 @@ func (c *Client) CloseChannel(param *SimpleChannelId) (*SimpleSuccessResponse, e
 	return &res, nil
 }
 
-// Gets channel counters.
+// ChannelCounters gets channel counters.
 func (c *Client) ChannelCounters(param *ChannelCountersRequest) (*ChannelCountersResponse, error) {
 
 	req, err := http.NewRequest("GET",
@@ -290,7 +290,7 @@ func (c *Client) ChannelCounters(param *ChannelCountersRequest) (*ChannelCounter
 	return &res, nil
 }
 
-// Creates a new channel.
+// CreateChannel creates a new channel.
 func (c *Client) CreateChannel(param *CreateChannelRequest) (*CreateChannelResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -311,7 +311,7 @@ func (c *Client) CreateChannel(param *CreateChannelRequest) (*CreateChannelRespo
 	return &res, nil
 }
 
-// Delete channel.
+// DeleteChannel deletes a channel.
 func (c *Client) DeleteChannel(param *SimpleChannelRequest) (*SimpleSuccessResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -332,7 +332,7 @@ func (c *Client) DeleteChannel(param *SimpleChannelRequest) (*SimpleSuccessRespo
 	return &res, nil
 }
 
-// Get channel info.
+// ChannelInfo gets channel info.
 func (c *Client) ChannelInfo(param *SimpleChannelRequest) (*ChannelInfoResponse, error) {
 
 	req, err := http.NewRequest("GET",
@@ -365,7 +365,7 @@ func (c *Client) ChannelInfo(param *SimpleChannelRequest) (*ChannelInfoResponse,
 	return &res, nil
 }
 
-// Adds a user to the channel.
+// ChannelInvite adds a user to the channel.
 func (c *Client) ChannelInvite(param *InviteChannelRequest) (*InviteChannelResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -386,7 +386,7 @@ func (c *Client) ChannelInvite(param *InviteChannelRequest) (*InviteChannelRespo
 	return &res, nil
 }
 
-// Kick a user from the channel.
+// ChannelKick kicks a user from the channel.
 func (c *Client) ChannelKick(param *InviteChannelRequest) (*InviteChannelResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -407,7 +407,7 @@ func (c *Client) ChannelKick(param *InviteChannelRequest) (*InviteChannelRespons
 	return &res, nil
 }
 
-// Get channels list
+// ChannelList lists all the channels on the server.
 func (c *Client) ChannelList() (*ChannelListResponse, error) {
 	req, err := http.NewRequest("GET",
 		fmt.Sprintf("%s/%s/channels.list", c.baseURL, c.apiVersion),
@@ -426,7 +426,7 @@ func (c *Client) ChannelList() (*ChannelListResponse, error) {
 	return &res, nil
 }
 
-// Gets channel members
+// ChannelMembers gets channel members
 func (c *Client) ChannelMembers(param *SimpleChannelRequest) (*ChannelMembersResponse, error) {
 
 	req, err := http.NewRequest("GET",
@@ -459,7 +459,7 @@ func (c *Client) ChannelMembers(param *SimpleChannelRequest) (*ChannelMembersRes
 	return &res, nil
 }
 
-// Adds the channel back to the user's list of channels.
+// OpenChannel adds the channel back to the user's list of channels.
 func (c *Client) OpenChannel(param *SimpleChannelId) (*SimpleSuccessResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -480,7 +480,7 @@ func (c *Client) OpenChannel(param *SimpleChannelId) (*SimpleSuccessResponse, er
 	return &res, nil
 }
 
-// Changes a channel's name.
+// RenameChannel changes a channel's name.
 func (c *Client) RenameChannel(param *RenameChannelRequest) (*RenameChannelResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -501,7 +501,7 @@ func (c *Client) RenameChannel(param *RenameChannelRequest) (*RenameChannelRespo
 	return &res, nil
 }
 
-// Sets the announcement for the channel.
+// SetAnnouncementChannel sets the announcement for the channel.
 func (c *Client) SetAnnouncementChannel(param *SetAnnouncementRequest) (*SetAnnouncementResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -522,7 +522,7 @@ func (c *Client) SetAnnouncementChannel(param *SetAnnouncementRequest) (*SetAnno
 	return &res, nil
 }
 
-// Sets the Description for the channel.
+// SetDescriptionChannel sets the description for the channel.
 func (c *Client) SetDescriptionChannel(param *SetDescriptionRequest) (*SetDescriptionResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -543,7 +543,7 @@ func (c *Client) SetDescriptionChannel(param *SetDescriptionRequest) (*SetDescri
 	return &res, nil
 }
 
-// Sets the topic for the channel.
+// SetTopicChannel sets the topic for the channel.
 func (c *Client) SetTopicChannel(param *SetTopicRequest) (*SetTopicResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -564,7 +564,7 @@ func (c *Client) SetTopicChannel(param *SetTopicRequest) (*SetTopicResponse, err
 	return &res, nil
 }
 
-// Unarchive a channel.
+// UnarchiveChannel unarchives a channel.
 func (c *Client) UnarchiveChannel(param *SimpleChannelId) (*SimpleSuccessResponse, error) {
 	opt, _ := json.Marshal(param)
 

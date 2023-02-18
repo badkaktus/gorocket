@@ -7,13 +7,13 @@ import (
 )
 
 type RespInfo struct {
+	ErrStatus
 	Info struct {
 		Version               string `json:"version"`
 		Build                 Build  `json:"build"`
 		Commit                Commit `json:"commit"`
 		MarketplaceAPIVersion string `json:"marketplaceApiVersion"`
 	} `json:"info"`
-	Success bool `json:"success"`
 }
 
 type Build struct {
@@ -37,11 +37,11 @@ type Commit struct {
 }
 
 type RespDirectory struct {
-	Result  []Result `json:"result"`
-	Count   int      `json:"count"`
-	Offset  int      `json:"offset"`
-	Total   int      `json:"total"`
-	Success bool     `json:"success"`
+	ErrStatus
+	Result []Result `json:"result"`
+	Count  int      `json:"count"`
+	Offset int      `json:"offset"`
+	Total  int      `json:"total"`
 }
 
 type Result struct {
@@ -76,10 +76,9 @@ type U struct {
 }
 
 type RespSpotlight struct {
-	Users   []UsersInfo `json:"users"`
-	Rooms   []RoomsInfo `json:"rooms"`
-	Success bool        `json:"success"`
-	Error   string      `json:"error,omitempty"`
+	ErrStatus
+	Users []UsersInfo `json:"users"`
+	Rooms []RoomsInfo `json:"rooms"`
 }
 
 type UsersInfo struct {
@@ -98,6 +97,7 @@ type RoomsInfo struct {
 }
 
 type RespStatistics struct {
+	ErrStatus
 	ID                        string       `json:"_id"`
 	Wizard                    Wizard       `json:"wizard"`
 	UniqueID                  string       `json:"uniqueId"`
@@ -154,7 +154,6 @@ type RespStatistics struct {
 	PushQueue                 int          `json:"pushQueue"`
 	CreatedAt                 time.Time    `json:"createdAt"`
 	UpdatedAt                 time.Time    `json:"_updatedAt"`
-	Success                   bool         `json:"success"`
 }
 
 type Wizard struct {
@@ -234,6 +233,7 @@ type Deploy struct {
 }
 
 type RespStatisticsList struct {
+	ErrStatus
 	Statistics []struct {
 		ID                        string       `json:"_id"`
 		Wizard                    Wizard       `json:"wizard"`
@@ -292,10 +292,9 @@ type RespStatisticsList struct {
 		LastMessageSentAt         time.Time    `json:"lastMessageSentAt,omitempty"`
 		LastSeenSubscription      time.Time    `json:"lastSeenSubscription,omitempty"`
 	} `json:"statistics"`
-	Count   int  `json:"count"`
-	Offset  int  `json:"offset"`
-	Total   int  `json:"total"`
-	Success bool `json:"success"`
+	Count  int `json:"count"`
+	Offset int `json:"offset"`
+	Total  int `json:"total"`
 }
 
 func (c *Client) Info() (*RespInfo, error) {

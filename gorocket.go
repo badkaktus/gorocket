@@ -14,6 +14,7 @@ type Client struct {
 	userID     string
 	xToken     string
 	apiVersion string
+	debug      bool
 	HTTPClient *http.Client
 
 	timeout time.Duration
@@ -77,7 +78,15 @@ func WithXToken(xtoken string) Option {
 	}
 }
 
-func (c *Client) sendRequest(req *http.Request, v interface{}) error {
+// WithDebug will cause API error response "details" to be added to error values, which may contain sensitive data such
+// as the input values provided to the failed request. These may contain sensitive data you might not want to log.
+func WithDebug() Option {
+	return func(c *Client) {
+		c.debug = true
+	}
+}
+
+func (c *Client) sendRequest(req *http.Request, v Response) error {
 	req.Header.Set("Accept", "application/json; charset=utf-8")
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 	req.Header.Add("X-Auth-Token", c.xToken)
@@ -105,7 +114,7 @@ func (c *Client) sendRequest(req *http.Request, v interface{}) error {
 		return err
 	}
 
-	return nil
+	return resp.OK(res.StatusCode, c.debug)
 }
 
 func (c *Client) Count(val int) *Client {
