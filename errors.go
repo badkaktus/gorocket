@@ -28,20 +28,20 @@ func (s ErrStatus) Error() string {
 	fmt.Fprintf(&sb, "rocket.chat response error (status code %d): success:%t", s.statusCode, s.Success)
 
 	if len(s.ErrorMsg) > 0 {
-		fmt.Fprintf(&sb, ", error:%s", s.ErrorMsg)
+		fmt.Fprintf(&sb, ", error:%q", s.ErrorMsg)
 	}
 	if len(s.ErrorType) > 0 {
-		fmt.Fprintf(&sb, ", errorType:%s", s.ErrorType)
+		fmt.Fprintf(&sb, ", errorType:%q", s.ErrorType)
 	}
 	if len(s.Status) > 0 {
-		fmt.Fprintf(&sb, ", status:%s", s.Status)
+		fmt.Fprintf(&sb, ", status:%q", s.Status)
 	}
 	if len(s.Message) > 0 {
-		fmt.Fprintf(&sb, ", message:%s", s.Message)
+		fmt.Fprintf(&sb, ", message:%q", s.Message)
 	}
 
 	if s.debug && s.Details != nil {
-		fmt.Fprintf(&sb, ", details:%s", s.Details)
+		fmt.Fprintf(&sb, ", details:%v", s.Details)
 	}
 
 	return sb.String()
