@@ -45,12 +45,10 @@ type AttachField struct {
 }
 
 type RespPostMessage struct {
-	Ts        int64           `json:"ts"`
-	Channel   string          `json:"channel"`
-	Message   RespMessageData `json:"message"`
-	Success   bool            `json:"success"`
-	Error     string          `json:"error,omitempty"`
-	ErrorType string          `json:"errorType,omitempty"`
+	ErrStatus
+	Ts      int64           `json:"ts"`
+	Channel string          `json:"channel"`
+	Message RespMessageData `json:"message"`
 }
 
 type RespMessageData struct {
@@ -75,8 +73,8 @@ type SingleMessageId struct {
 }
 
 type GetMessageResponse struct {
+	ErrStatus
 	Message MessageResp `json:"message"`
-	Success bool        `json:"success"`
 }
 
 type MessageResp struct {
@@ -97,9 +95,9 @@ type DeleteMessageRequest struct {
 }
 
 type DeleteMessageResponse struct {
-	ID      string `json:"_id"`
-	Ts      int64  `json:"ts"`
-	Success bool   `json:"success"`
+	ErrStatus
+	ID string `json:"_id"`
+	Ts int64  `json:"ts"`
 }
 
 type GetPinnedMsgRequest struct {
@@ -109,11 +107,11 @@ type GetPinnedMsgRequest struct {
 }
 
 type GetPinnedMsgResponse struct {
+	ErrStatus
 	Messages []PinnedMessage `json:"messages"`
 	Count    int             `json:"count"`
 	Offset   int             `json:"offset"`
 	Total    int             `json:"total"`
-	Success  bool            `json:"success"`
 }
 
 type PinnedMessage struct {
@@ -138,6 +136,7 @@ type PinnedMessage struct {
 }
 
 type PinMessageResponse struct {
+	ErrStatus
 	Message struct {
 		T   string    `json:"t"`
 		Rid string    `json:"rid"`
@@ -157,10 +156,9 @@ type PinMessageResponse struct {
 		UpdatedAt time.Time `json:"_updatedAt"`
 		ID        string    `json:"_id"`
 	} `json:"message"`
-	Success bool `json:"success"`
 }
 
-// Posts a new chat message.
+// PostMessage posts a new chat message.
 func (c *Client) PostMessage(msg *Message) (*RespPostMessage, error) {
 
 	opt, _ := json.Marshal(msg)
@@ -182,7 +180,7 @@ func (c *Client) PostMessage(msg *Message) (*RespPostMessage, error) {
 	return &res, nil
 }
 
-// Retrieves a single chat message by the provided id.
+// GetMessage retrieves a single chat message by the provided id.
 // Callee must have permission to access the room where the message resides.
 func (c *Client) GetMessage(param *SingleMessageId) (*GetMessageResponse, error) {
 	req, err := http.NewRequest("GET",
@@ -212,7 +210,7 @@ func (c *Client) GetMessage(param *SingleMessageId) (*GetMessageResponse, error)
 	return &res, nil
 }
 
-// Chat Message Delete
+// DeleteMessage deletes a chat message by ID.
 func (c *Client) DeleteMessage(param *DeleteMessageRequest) (*DeleteMessageResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -233,7 +231,7 @@ func (c *Client) DeleteMessage(param *DeleteMessageRequest) (*DeleteMessageRespo
 	return &res, nil
 }
 
-// Callee must have permission to access the room where the message resides.
+// GetPinnedMessages retrieves pinned messages from a room. Callee must have permission to access the room where the message resides.
 func (c *Client) GetPinnedMessages(param *GetPinnedMsgRequest) (*GetPinnedMsgResponse, error) {
 	req, err := http.NewRequest("GET",
 		fmt.Sprintf("%s/%s/chat.getPinnedMessages", c.baseURL, c.apiVersion),
@@ -268,7 +266,7 @@ func (c *Client) GetPinnedMessages(param *GetPinnedMsgRequest) (*GetPinnedMsgRes
 	return &res, nil
 }
 
-// Pins a chat message to the message's channel.
+// PinMessage pins a chat message to the message's channel.
 func (c *Client) PinMessage(param *SingleMessageId) (*PinMessageResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -289,7 +287,7 @@ func (c *Client) PinMessage(param *SingleMessageId) (*PinMessageResponse, error)
 	return &res, nil
 }
 
-// Unpins a chat message to the message's channel.
+// UnpinMessage unpins a chat message from the message's channel.
 func (c *Client) UnpinMessage(param *SingleMessageId) (*SimpleSuccessResponse, error) {
 	opt, _ := json.Marshal(param)
 

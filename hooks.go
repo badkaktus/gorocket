@@ -22,7 +22,7 @@ type HookAttachment struct {
 }
 
 type HookResponse struct {
-	Success bool `json:"success"`
+	ErrStatus
 }
 
 func (c *Client) Hooks(msg *HookMessage, token string) (*HookResponse, error) {

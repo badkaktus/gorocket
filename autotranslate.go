@@ -6,8 +6,8 @@ import (
 )
 
 type SupportedLanguageResp struct {
+	ErrStatus
 	Languages []language `json:"languages"`
-	Success   bool       `json:"success"`
 }
 
 type language struct {
