@@ -1,3 +1,5 @@
+![tests](https://github.com/badkaktus/gorocket/actions/workflows/test.yaml/badge.svg)
+
 ![gorocket logo](gorocket_logo.png)
 
 # Golang Rocket Chat REST API client
