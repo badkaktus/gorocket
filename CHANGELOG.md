@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## [v0.1.4] - 2024-02-03
+- Updated the description of all methods according to the golang convention
+- Comment few fields in GroupMessage struct (will fix it in next release)
+- Fix InviteGroupResponse struct
+- Fix RespInfo struct
+- Fix RespDirectory struct
+- Fix UsersInfoResponse struct
+- Write tests for all methods
+- Added logo 😄 
+
 ## [v0.1.3] - 2022-10-27
 - Bugfix: count/offset/sort overwrite other params
 - Add receive group messages (GroupMessage)
