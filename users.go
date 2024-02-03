@@ -114,19 +114,20 @@ type GetStatusResponse struct {
 }
 
 type UsersInfoResponse struct {
-	User    singleUserInfo `json:"user"`
+	User    SingleUserInfo `json:"user"`
 	Success bool           `json:"success"`
 }
 
-type singleUserInfo struct {
-	ID         string  `json:"_id"`
-	Type       string  `json:"type"`
-	Status     string  `json:"status"`
-	Active     bool    `json:"active"`
-	Name       string  `json:"name"`
-	UtcOffset  float64 `json:"utcOffset"`
-	Username   string  `json:"username"`
-	AvatarETag string  `json:"avatarETag,omitempty"`
+type SingleUserInfo struct {
+	ID         string    `json:"_id"`
+	CreatedAt  time.Time `json:"createdAt"`
+	Type       string    `json:"type"`
+	Status     string    `json:"status"`
+	Active     bool      `json:"active"`
+	Name       string    `json:"name"`
+	UtcOffset  float64   `json:"utcOffset"`
+	Username   string    `json:"username"`
+	AvatarETag string    `json:"avatarETag,omitempty"`
 }
 
 type UserRegisterRequest struct {
@@ -182,7 +183,7 @@ type userUpdateInfo struct {
 	Name      string    `json:"name"`
 }
 
-// Gets all connected users presence
+// UsersPresence gets all connected users presence
 func (c *Client) UsersPresence(query string) (*UsersPresenceResponse, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/%s/users.presence?from=%s", c.baseURL, c.apiVersion, query), nil)
 
@@ -198,7 +199,7 @@ func (c *Client) UsersPresence(query string) (*UsersPresenceResponse, error) {
 	return &res, nil
 }
 
-// Create a new user. Requires create-user permission.
+// UsersCreate creates a new user.
 func (c *Client) UsersCreate(user *NewUser) (*UserCreateResponse, error) {
 	opt, _ := json.Marshal(user)
 
@@ -219,7 +220,7 @@ func (c *Client) UsersCreate(user *NewUser) (*UserCreateResponse, error) {
 	return &res, nil
 }
 
-// Deletes an existing user. Requires delete-user permission.
+// UsersDelete deletes a user.
 func (c *Client) UsersDelete(user *UsersDelete) (*SimpleSuccessResponse, error) {
 	opt, _ := json.Marshal(user)
 
@@ -240,7 +241,7 @@ func (c *Client) UsersDelete(user *UsersDelete) (*SimpleSuccessResponse, error) 
 	return &res, nil
 }
 
-// Create a user authentication token.
+// UsersCreateToken creates a user token.
 func (c *Client) UsersCreateToken(user *SimpleUserRequest) (*CreateTokenResponse, error) {
 	opt, _ := json.Marshal(user)
 
@@ -261,12 +262,12 @@ func (c *Client) UsersCreateToken(user *SimpleUserRequest) (*CreateTokenResponse
 	return &res, nil
 }
 
-// Deactivate Idle users. Requires edit-other-user-active-status permission.
+// UsersDeactivateIdle deactivates idle users.
 func (c *Client) UsersDeactivateIdle(params *DeactivateRequest) (*DeactivateResponse, error) {
 	opt, _ := json.Marshal(params)
 
 	req, err := http.NewRequest("POST",
-		fmt.Sprintf("%s/%s/users.createToken", c.baseURL, c.apiVersion),
+		fmt.Sprintf("%s/%s/users.deactivateIdle", c.baseURL, c.apiVersion),
 		bytes.NewBuffer(opt))
 
 	if err != nil {
@@ -282,14 +283,14 @@ func (c *Client) UsersDeactivateIdle(params *DeactivateRequest) (*DeactivateResp
 	return &res, nil
 }
 
-// Deletes your own user. Requires Allow Users to Delete Own Account enabled. Accessible from Administration -> Accounts.
+// UsersDeleteOwnAccount deletes your own account.
 func (c *Client) UsersDeleteOwnAccount(pass string) (*SimpleSuccessResponse, error) {
 
 	param := struct {
-		password string `json:"password"`
+		Password string `json:"password"`
 	}{}
 
-	param.password = fmt.Sprintf("%x", sha256.Sum256([]byte(pass)))
+	param.Password = fmt.Sprintf("%x", sha256.Sum256([]byte(pass)))
 
 	opt, _ := json.Marshal(param)
 
@@ -310,12 +311,12 @@ func (c *Client) UsersDeleteOwnAccount(pass string) (*SimpleSuccessResponse, err
 	return &res, nil
 }
 
-// Send email to reset your password.
+// UsersForgotPassword send an email to reset your password
 func (c *Client) UsersForgotPassword(email string) (*SimpleSuccessResponse, error) {
 	param := struct {
-		email string `json:"email"`
+		Email string `json:"email"`
 	}{
-		email: email,
+		Email: email,
 	}
 
 	opt, _ := json.Marshal(param)
@@ -337,7 +338,7 @@ func (c *Client) UsersForgotPassword(email string) (*SimpleSuccessResponse, erro
 	return &res, nil
 }
 
-// Generate Personal Access Token. Requires create-personal-access-tokens permission.
+// UsersGeneratePersonalAccessToken generates a personal access token
 func (c *Client) UsersGeneratePersonalAccessToken(params *GetNewToken) (*NewTokenResponse, error) {
 	opt, _ := json.Marshal(params)
 
@@ -358,12 +359,12 @@ func (c *Client) UsersGeneratePersonalAccessToken(params *GetNewToken) (*NewToke
 	return &res, nil
 }
 
-// Gets a user's Status if the query string userId or username is provided, otherwise it gets the callee's.
+// UsersGetStatus gets the status of a user
 func (c *Client) UsersGetStatus(user *SimpleUserRequest) (*GetStatusResponse, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/%s/users.getStatus", c.baseURL, c.apiVersion), nil)
 
 	if user.Username == "" && user.UserId == "" {
-		return nil, fmt.Errorf("False parameters")
+		return nil, fmt.Errorf("false parameters")
 	}
 
 	url := req.URL.Query()
@@ -387,7 +388,7 @@ func (c *Client) UsersGetStatus(user *SimpleUserRequest) (*GetStatusResponse, er
 	return &res, nil
 }
 
-// Retrieves information about a user, the result is only limited to what the callee has access to view.
+// UsersInfo gets the information of a user
 func (c *Client) UsersInfo(user *SimpleUserRequest) (*UsersInfoResponse, error) {
 	opt, _ := json.Marshal(user)
 
@@ -396,7 +397,7 @@ func (c *Client) UsersInfo(user *SimpleUserRequest) (*UsersInfoResponse, error) 
 		bytes.NewBuffer(opt))
 
 	if user.Username == "" && user.UserId == "" {
-		return nil, fmt.Errorf("False parameters")
+		return nil, fmt.Errorf("false parameters")
 	}
 
 	url := req.URL.Query()
@@ -421,7 +422,7 @@ func (c *Client) UsersInfo(user *SimpleUserRequest) (*UsersInfoResponse, error) 
 	return &res, nil
 }
 
-// Register a new user.
+// UsersRegister registers a new user
 func (c *Client) UsersRegister(user *UserRegisterRequest) (*UsersInfoResponse, error) {
 	opt, _ := json.Marshal(user)
 
@@ -442,7 +443,7 @@ func (c *Client) UsersRegister(user *UserRegisterRequest) (*UsersInfoResponse, e
 	return &res, nil
 }
 
-// Sets a user Status when the status message and state is given.
+// UsersSetStatus sets the status of a user
 func (c *Client) UsersSetStatus(status *SetStatus) (*SimpleSuccessResponse, error) {
 	opt, _ := json.Marshal(status)
 
@@ -463,7 +464,7 @@ func (c *Client) UsersSetStatus(status *SetStatus) (*SimpleSuccessResponse, erro
 	return &res, nil
 }
 
-// Update an existing user.
+// UsersUpdate updates a user
 func (c *Client) UsersUpdate(user *UserUpdateRequest) (*UserUpdateResponse, error) {
 	opt, _ := json.Marshal(user)
 

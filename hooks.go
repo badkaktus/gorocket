@@ -34,8 +34,6 @@ func (c *Client) Hooks(msg *HookMessage, token string) (*HookResponse, error) {
 		url,
 		bytes.NewBuffer(opt))
 
-	fmt.Println(url)
-
 	req.Header.Set("Accept", "application/json; charset=utf-8")
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 
@@ -45,7 +43,6 @@ func (c *Client) Hooks(msg *HookMessage, token string) (*HookResponse, error) {
 	}
 
 	res, err := c.HTTPClient.Do(req)
-
 	defer res.Body.Close()
 
 	if err != nil {

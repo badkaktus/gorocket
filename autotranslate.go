@@ -15,6 +15,7 @@ type language struct {
 	Name     string `json:"name"`
 }
 
+// GetSupportedLanguage returns a list of supported languages by the autotranslate
 func (c *Client) GetSupportedLanguage(query string) (*SupportedLanguageResp, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/%s/autotranslate.getSupportedLanguages", c.baseURL, c.apiVersion), nil)
 	if err != nil {

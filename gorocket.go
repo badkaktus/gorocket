@@ -3,10 +3,11 @@ package gorocket
 import (
 	"context"
 	"encoding/json"
-	"github.com/google/go-querystring/query"
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/google/go-querystring/query"
 )
 
 type Client struct {

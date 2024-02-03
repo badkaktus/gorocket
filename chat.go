@@ -96,6 +96,7 @@ type DeleteMessageRequest struct {
 	AsUser bool   `json:"asUser,omitempty"`
 }
 
+// todo add the remaining fields
 type DeleteMessageResponse struct {
 	ID      string `json:"_id"`
 	Ts      int64  `json:"ts"`
@@ -160,7 +161,7 @@ type PinMessageResponse struct {
 	Success bool `json:"success"`
 }
 
-// Posts a new chat message.
+// PostMessage posts a new chat message.
 func (c *Client) PostMessage(msg *Message) (*RespPostMessage, error) {
 
 	opt, _ := json.Marshal(msg)
@@ -182,7 +183,7 @@ func (c *Client) PostMessage(msg *Message) (*RespPostMessage, error) {
 	return &res, nil
 }
 
-// Retrieves a single chat message by the provided id.
+// GetMessage retrieves a single chat message by the provided id.
 // Callee must have permission to access the room where the message resides.
 func (c *Client) GetMessage(param *SingleMessageId) (*GetMessageResponse, error) {
 	req, err := http.NewRequest("GET",
@@ -190,7 +191,7 @@ func (c *Client) GetMessage(param *SingleMessageId) (*GetMessageResponse, error)
 		nil)
 
 	if param.MessageId == "" {
-		return nil, fmt.Errorf("False parameters")
+		return nil, fmt.Errorf("false parameters")
 	}
 
 	url := req.URL.Query()
@@ -212,7 +213,7 @@ func (c *Client) GetMessage(param *SingleMessageId) (*GetMessageResponse, error)
 	return &res, nil
 }
 
-// Chat Message Delete
+// DeleteMessage deletes an existing chat message.
 func (c *Client) DeleteMessage(param *DeleteMessageRequest) (*DeleteMessageResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -233,14 +234,14 @@ func (c *Client) DeleteMessage(param *DeleteMessageRequest) (*DeleteMessageRespo
 	return &res, nil
 }
 
-// Callee must have permission to access the room where the message resides.
+// GetPinnedMessages retrieve pinned messages from a room.
 func (c *Client) GetPinnedMessages(param *GetPinnedMsgRequest) (*GetPinnedMsgResponse, error) {
 	req, err := http.NewRequest("GET",
 		fmt.Sprintf("%s/%s/chat.getPinnedMessages", c.baseURL, c.apiVersion),
 		nil)
 
 	if param.RoomId == "" {
-		return nil, fmt.Errorf("False parameters")
+		return nil, fmt.Errorf("false parameters")
 	}
 
 	url := req.URL.Query()
@@ -268,7 +269,7 @@ func (c *Client) GetPinnedMessages(param *GetPinnedMsgRequest) (*GetPinnedMsgRes
 	return &res, nil
 }
 
-// Pins a chat message to the message's channel.
+// PinMessage pins a chat message to the message's channel.
 func (c *Client) PinMessage(param *SingleMessageId) (*PinMessageResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -289,7 +290,7 @@ func (c *Client) PinMessage(param *SingleMessageId) (*PinMessageResponse, error)
 	return &res, nil
 }
 
-// Unpins a chat message to the message's channel.
+// UnpinMessage unpins a chat message to the message's channel.
 func (c *Client) UnpinMessage(param *SingleMessageId) (*SimpleSuccessResponse, error) {
 	opt, _ := json.Marshal(param)
 
