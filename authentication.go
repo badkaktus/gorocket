@@ -135,8 +135,8 @@ type MeResponse struct {
 	Success               bool      `json:"success"`
 }
 
+// Login login the user with the given credentials.
 func (c *Client) Login(login *LoginPayload) (*LoginResponse, error) {
-
 	opt, _ := json.Marshal(login)
 	url := fmt.Sprintf("%s/%s/login", c.baseURL, c.apiVersion)
 
@@ -162,6 +162,7 @@ func (c *Client) Login(login *LoginPayload) (*LoginResponse, error) {
 	return &res, nil
 }
 
+// Logout logout the user.
 func (c *Client) Logout() (*LogoutResponse, error) {
 	req, err := http.NewRequest("POST", fmt.Sprintf("%s/%s/logout", c.baseURL, c.apiVersion), nil)
 	if err != nil {
@@ -176,6 +177,7 @@ func (c *Client) Logout() (*LogoutResponse, error) {
 	return &res, nil
 }
 
+// Me get the user information.
 func (c *Client) Me() (*MeResponse, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/%s/me", c.baseURL, c.apiVersion), nil)
 	if err != nil {

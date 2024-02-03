@@ -1,3 +1,7 @@
+![tests](https://github.com/badkaktus/gorocket/actions/workflows/test.yaml/badge.svg)
+
+![gorocket logo](gorocket_logo.png)
+
 # Golang Rocket Chat REST API client
 
 Use this simple client if you need to connect to Rocket Chat 
@@ -15,6 +19,15 @@ import (
 
 Create client
 ```go
+client := gorocket.NewWithOptions("https://your-rocket-chat.com", 
+    gorocket.WithUserID("my-user-id"),
+    gorocket.WithToken("my-bot-token"),
+    gorocket.WithTimeout(1 * time.Second),
+)
+```
+or 
+
+```go
 client := gorocket.NewClient("https://your-rocket-chat.com")
 
 // login as the main admin user
@@ -29,16 +42,6 @@ if err != nil {
     fmt.Printf("Error: %+v", err)
 }
 fmt.Printf("I'm %s", lg.Data.Me.Username)
-```
-
-or 
-
-```go
-client := gorocket.NewWithOptions("https://your-rocket-chat.com", 
-    gorocket.WithUserID("my-user-id"),
-    gorocket.WithToken("my-bot-token"),
-    gorocket.WithTimeout(1 * time.Second),
-)
 ```
 
 ## Manage user

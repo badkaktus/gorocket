@@ -194,7 +194,7 @@ type SetTopicResponse struct {
 	Success bool   `json:"success"`
 }
 
-// Adds all of the users on the server to a channel.
+// AddAllToChannel adds all of the users on the server to a channel.
 func (c *Client) AddAllToChannel(params *AddAllRequest) (*AddAllResponse, error) {
 	opt, _ := json.Marshal(params)
 
@@ -215,7 +215,7 @@ func (c *Client) AddAllToChannel(params *AddAllRequest) (*AddAllResponse, error)
 	return &res, nil
 }
 
-// Archives a channel.
+// ArchiveChannel archives a channel.
 func (c *Client) ArchiveChannel(param *SimpleChannelId) (*SimpleSuccessResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -236,7 +236,7 @@ func (c *Client) ArchiveChannel(param *SimpleChannelId) (*SimpleSuccessResponse,
 	return &res, nil
 }
 
-// Removes the channel from the user's list of channels.
+// CloseChannel removes the channel from the user's list of channels.
 func (c *Client) CloseChannel(param *SimpleChannelId) (*SimpleSuccessResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -257,7 +257,7 @@ func (c *Client) CloseChannel(param *SimpleChannelId) (*SimpleSuccessResponse, e
 	return &res, nil
 }
 
-// Gets channel counters.
+// ChannelCounters gets channel counters.
 func (c *Client) ChannelCounters(param *ChannelCountersRequest) (*ChannelCountersResponse, error) {
 
 	req, err := http.NewRequest("GET",
@@ -265,7 +265,7 @@ func (c *Client) ChannelCounters(param *ChannelCountersRequest) (*ChannelCounter
 		nil)
 
 	if param.RoomName == "" && param.RoomId == "" {
-		return nil, fmt.Errorf("False parameters")
+		return nil, fmt.Errorf("false parameters")
 	}
 
 	url := req.URL.Query()
@@ -290,7 +290,7 @@ func (c *Client) ChannelCounters(param *ChannelCountersRequest) (*ChannelCounter
 	return &res, nil
 }
 
-// Creates a new channel.
+// CreateChannel creates a new channel.
 func (c *Client) CreateChannel(param *CreateChannelRequest) (*CreateChannelResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -311,7 +311,7 @@ func (c *Client) CreateChannel(param *CreateChannelRequest) (*CreateChannelRespo
 	return &res, nil
 }
 
-// Delete channel.
+// DeleteChannel delete channel.
 func (c *Client) DeleteChannel(param *SimpleChannelRequest) (*SimpleSuccessResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -332,7 +332,7 @@ func (c *Client) DeleteChannel(param *SimpleChannelRequest) (*SimpleSuccessRespo
 	return &res, nil
 }
 
-// Get channel info.
+// ChannelInfo get channel info.
 func (c *Client) ChannelInfo(param *SimpleChannelRequest) (*ChannelInfoResponse, error) {
 
 	req, err := http.NewRequest("GET",
@@ -340,7 +340,7 @@ func (c *Client) ChannelInfo(param *SimpleChannelRequest) (*ChannelInfoResponse,
 		nil)
 
 	if param.RoomName == "" && param.RoomId == "" {
-		return nil, fmt.Errorf("False parameters")
+		return nil, fmt.Errorf("false parameters")
 	}
 
 	url := req.URL.Query()
@@ -365,7 +365,7 @@ func (c *Client) ChannelInfo(param *SimpleChannelRequest) (*ChannelInfoResponse,
 	return &res, nil
 }
 
-// Adds a user to the channel.
+// ChannelInvite adds a user to the channel.
 func (c *Client) ChannelInvite(param *InviteChannelRequest) (*InviteChannelResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -386,7 +386,7 @@ func (c *Client) ChannelInvite(param *InviteChannelRequest) (*InviteChannelRespo
 	return &res, nil
 }
 
-// Kick a user from the channel.
+// ChannelKick kick a user from the channel.
 func (c *Client) ChannelKick(param *InviteChannelRequest) (*InviteChannelResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -407,7 +407,7 @@ func (c *Client) ChannelKick(param *InviteChannelRequest) (*InviteChannelRespons
 	return &res, nil
 }
 
-// Get channels list
+// ChannelList get channels list
 func (c *Client) ChannelList() (*ChannelListResponse, error) {
 	req, err := http.NewRequest("GET",
 		fmt.Sprintf("%s/%s/channels.list", c.baseURL, c.apiVersion),
@@ -426,7 +426,7 @@ func (c *Client) ChannelList() (*ChannelListResponse, error) {
 	return &res, nil
 }
 
-// Gets channel members
+// ChannelMembers gets channel members
 func (c *Client) ChannelMembers(param *SimpleChannelRequest) (*ChannelMembersResponse, error) {
 
 	req, err := http.NewRequest("GET",
@@ -434,7 +434,7 @@ func (c *Client) ChannelMembers(param *SimpleChannelRequest) (*ChannelMembersRes
 		nil)
 
 	if param.RoomName == "" && param.RoomId == "" {
-		return nil, fmt.Errorf("False parameters")
+		return nil, fmt.Errorf("false parameters")
 	}
 
 	url := req.URL.Query()
@@ -459,7 +459,7 @@ func (c *Client) ChannelMembers(param *SimpleChannelRequest) (*ChannelMembersRes
 	return &res, nil
 }
 
-// Adds the channel back to the user's list of channels.
+// OpenChannel adds the channel back to the user's list of channels.
 func (c *Client) OpenChannel(param *SimpleChannelId) (*SimpleSuccessResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -480,7 +480,7 @@ func (c *Client) OpenChannel(param *SimpleChannelId) (*SimpleSuccessResponse, er
 	return &res, nil
 }
 
-// Changes a channel's name.
+// RenameChannel changes a channel's name.
 func (c *Client) RenameChannel(param *RenameChannelRequest) (*RenameChannelResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -501,7 +501,7 @@ func (c *Client) RenameChannel(param *RenameChannelRequest) (*RenameChannelRespo
 	return &res, nil
 }
 
-// Sets the announcement for the channel.
+// SetAnnouncementChannel sets the announcement for the channel.
 func (c *Client) SetAnnouncementChannel(param *SetAnnouncementRequest) (*SetAnnouncementResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -522,7 +522,7 @@ func (c *Client) SetAnnouncementChannel(param *SetAnnouncementRequest) (*SetAnno
 	return &res, nil
 }
 
-// Sets the Description for the channel.
+// SetDescriptionChannel sets the Description for the channel.
 func (c *Client) SetDescriptionChannel(param *SetDescriptionRequest) (*SetDescriptionResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -543,7 +543,7 @@ func (c *Client) SetDescriptionChannel(param *SetDescriptionRequest) (*SetDescri
 	return &res, nil
 }
 
-// Sets the topic for the channel.
+// SetTopicChannel sets the topic for the channel.
 func (c *Client) SetTopicChannel(param *SetTopicRequest) (*SetTopicResponse, error) {
 	opt, _ := json.Marshal(param)
 
@@ -564,7 +564,7 @@ func (c *Client) SetTopicChannel(param *SetTopicRequest) (*SetTopicResponse, err
 	return &res, nil
 }
 
-// Unarchive a channel.
+// UnarchiveChannel unarchive a channel.
 func (c *Client) UnarchiveChannel(param *SimpleChannelId) (*SimpleSuccessResponse, error) {
 	opt, _ := json.Marshal(param)
 

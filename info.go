@@ -7,7 +7,8 @@ import (
 )
 
 type RespInfo struct {
-	Info struct {
+	Version string `json:"version"`
+	Info    struct {
 		Version               string `json:"version"`
 		Build                 Build  `json:"build"`
 		Commit                Commit `json:"commit"`
@@ -37,11 +38,20 @@ type Commit struct {
 }
 
 type RespDirectory struct {
-	Result  []Result `json:"result"`
-	Count   int      `json:"count"`
-	Offset  int      `json:"offset"`
-	Total   int      `json:"total"`
-	Success bool     `json:"success"`
+	Result  []DirectoryResult `json:"result"`
+	Count   int               `json:"count"`
+	Offset  int               `json:"offset"`
+	Total   int               `json:"total"`
+	Success bool              `json:"success"`
+}
+
+type DirectoryResult struct {
+	ID         string    `json:"_id"`
+	CreatedAt  time.Time `json:"createdAt"`
+	Emails     []Email   `json:"emails"`
+	Name       string    `json:"name"`
+	Username   string    `json:"username"`
+	AvatarETag string    `json:"avatarETag"`
 }
 
 type Result struct {
@@ -88,6 +98,7 @@ type UsersInfo struct {
 	Name       string `json:"name"`
 	Username   string `json:"username"`
 	StatusText string `json:"statusText"`
+	AvatarETag string `json:"avatarETag,omitempty"`
 }
 
 type RoomsInfo struct {
@@ -298,6 +309,7 @@ type RespStatisticsList struct {
 	Success bool `json:"success"`
 }
 
+// Info returns information about the server
 func (c *Client) Info() (*RespInfo, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/api/info", c.baseURL), nil)
 	if err != nil {
@@ -312,6 +324,7 @@ func (c *Client) Info() (*RespInfo, error) {
 	return &res, nil
 }
 
+// Directory returns a list of channels
 func (c *Client) Directory() (*RespDirectory, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/%s/directory", c.baseURL, c.apiVersion), nil)
 	if err != nil {
@@ -326,6 +339,7 @@ func (c *Client) Directory() (*RespDirectory, error) {
 	return &res, nil
 }
 
+// Spotlight returns a list of users and rooms that match the provided query
 func (c *Client) Spotlight(query string) (*RespSpotlight, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/%s/spotlight?query=%s", c.baseURL, c.apiVersion, query), nil)
 
@@ -341,6 +355,7 @@ func (c *Client) Spotlight(query string) (*RespSpotlight, error) {
 	return &res, nil
 }
 
+// Statistics returns statistics about the server
 func (c *Client) Statistics() (*RespStatistics, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/%s/statistics", c.baseURL, c.apiVersion), nil)
 	if err != nil {
@@ -355,6 +370,7 @@ func (c *Client) Statistics() (*RespStatistics, error) {
 	return &res, nil
 }
 
+// StatisticsList returns a list of statistics
 func (c *Client) StatisticsList() (*RespStatisticsList, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/%s/statistics.list", c.baseURL, c.apiVersion), nil)
 	if err != nil {
